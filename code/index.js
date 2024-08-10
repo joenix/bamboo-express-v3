@@ -43,7 +43,7 @@ app.use("/role", role)
 app.use('/uploads', express.static(file_path));
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 6033;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
