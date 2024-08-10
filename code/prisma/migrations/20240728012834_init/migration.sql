@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `School` ADD COLUMN `img` VARCHAR(191) NULL;

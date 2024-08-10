@@ -1,32 +1,49 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-
+const express = require('express');
+const cors = require("cors")
+const { verifyToken } = require("./utils/jwt")
+const bodyParser = require('body-parser');
+const pro_cfg = require("./config.json")
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
+const publics = require("./views/public")
+
+const file_path = pro_cfg["STATIC_PATH"]
+
+const users = require("./views/user")
+const infomation = require("./views/infomation")
+const permission = require("./views/permission")
+const role = require("./views/role")
+const book = require("./views/book")
+const banner = require("./views/banner")
+const landing = require("./views/landing")
+const teach = require("./views/teach")
+const tips = require("./views/tips")
+const school = require("./views/school")
+const code = require("./views/code")
+const material = require("./views/material")
+
+app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.text());
-app.use(bodyParser.raw());
+app.use(express.urlencoded({ extended: true }));  // 解析URL编码请求体
+app.use(verifyToken)
 
-app.all("/*", (req, res) => {
-  const requestId = req.headers["x-fc-request-id"];
-  console.log("FC Invoke Start RequestId: " + requestId);
+app.use('/material', material)
+app.use('/code', code)
+app.use('/school', school);
+app.use('/teach', teach);
+app.use('/tips', tips);
+app.use('/banner', banner);
+app.use('/book', book);
+app.use('/landing', landing);
+app.use('/users', users);
+app.use('/public', publics)
+app.use('/infomation', infomation)
+app.use('/permission', permission)
+app.use("/role", role)
+app.use('/uploads', express.static(file_path));
 
-  res.send(
-    JSON.stringify({
-      msg: "Hello, World! ",
-      request: {
-        query: req.query,
-        path: req.originalUrl,
-        data: req.body,
-        clientIp: req.headers["x-forwarded-for"],
-      },
-    })
-  );
 
-  console.log("FC Invoke End RequestId: " + requestId);
-});
-
-app.listen(9000, () => {
-  console.log("Express started on port 9000");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

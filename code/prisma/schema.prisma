@@ -1,0 +1,292 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 用户表
+model User {
+  id            Int         @id @default(autoincrement())
+  username      String      @unique
+  password      String
+  openId        String?     @unique
+  unionId       String?     @unique
+  nickname      String?
+  school        String?
+  grade         String?
+  sign_text     String?
+  age           String?
+  avatarUrl     String?
+  gender        Int?
+  language      String?
+  city          String?
+  province      String?
+  country       String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  creditId      Int?        @unique
+  credits       Credit?     @relation("UserCredit")
+  roleId        Int?
+  roles         Role?       @relation(fields: [roleId], references: [id])
+  creditHistory CreditHis[]
+  user_Info     User_Info[]
+  bookHis       BookHis[]
+  bookHisCount  BookHisCount[]
+  code          Code[]
+  User_Code     User_Code[]
+  delete    Boolean  @default(false)
+}
+
+// 用户拥有那些code 
+model User_Code {
+  id        Int      @id @default(autoincrement())
+  code      String
+  userId    Int
+  used      Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id])
+  delete    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// 用户信息 一个用户对应多条信息
+model User_Info {
+  id        Int      @id @default(autoincrement())
+  avatar    String
+  leftEyes  String
+  rightEyes String
+  height    String
+  weight    String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  delete    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// 角色表 管理员 老师 普通微信用户
+model Role {
+  id           Int        @id @default(autoincrement())
+  name         String     @default("")
+  description  String?
+  user         User[]
+  permissionId String?
+  delete       Boolean    @default(false)
+  permission   Permission[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+// 权限表
+model Permission {
+  id          Int      @id @default(autoincrement())
+  name        String   @default("")
+  Role        Role[]
+  delete      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  description String?
+}
+
+// 学分表
+model Credit {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  user      User     @relation("UserCredit", fields: [userId], references: [id])
+  credit    Int      @default(0)
+  delete    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// 学分记录表
+model CreditHis {
+  id        Int      @id @default(autoincrement())
+  credit    Int      @default(0)
+  content   String?
+  delete    Boolean  @default(false)
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// 物料
+// type 1 图片 2 视频 3 书 4 音乐 5 附件
+model Material {
+  id          Int           @id @default(autoincrement())
+  url         String
+  link        String?
+  name        String
+  content     String?
+  type        Int           @default(1)
+  delete      Boolean       @default(false)
+  information Information[]
+  banner      Banner[]
+  book        Book[]
+  tips        Tips[]
+  landing     Landing[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+// 资讯
+model Information {
+  id        Int        @id @default(autoincrement())
+  content   String
+  name      String
+  img       String
+  video     String
+  material  Material[]
+  type      String    @default("1")
+  delete    Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+// Landing 活动页配置
+model Landing {
+  id        Int        @id @default(autoincrement())
+  content   Json
+  name      String
+  type      Int     @default(1)
+  material  Material[]
+  delete    Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+
+// 轮播
+model Banner {
+  id        Int        @id @default(autoincrement())
+  content   String
+  name      String
+  img       String
+  video     String
+  material  Material[]
+  used      Boolean    @default(true)
+  index     Int        @default(1)
+  delete    Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+// 书
+model Book {
+  id        Int        @id @default(autoincrement())
+  name      String
+  url       String
+  img       String
+  content   String
+  material  Material[]
+  isdefault Boolean    @default(false) // 设置未激活的书
+  code      Code[]
+  bookHisCount BookHisCount[]
+  bookHis   BookHis[]
+  delete    Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+// 用户点读记录 总记
+model BookHisCount {
+  id        Int      @id @default(autoincrement())
+  time      Int
+  count     Int
+  content   String
+  bookId    Int
+  book      Book     @relation(fields: [bookId], references: [id])
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  delete    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// 用户点读记录历史
+model BookHis {
+  id        Int      @id @default(autoincrement())
+  time      Int
+  count     Int
+  content   String
+  bookId    Int
+  book      Book     @relation(fields: [bookId], references: [id])
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  delete    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// 激活码
+model Code {
+  id          Int       @id @default(autoincrement())
+  bookId      Int
+  book        Book      @relation(fields: [bookId], references: [id])
+  code        String    @unique
+  userId      Int? // 可选外键，关联到 User 模型
+  user        User?     @relation(fields: [userId], references: [id])
+  active      Boolean   @default(false)
+  activatedAt DateTime? // 记录激活时间
+  delete      Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+}
+// 贴士集
+model Tips {
+  id        Int        @id @default(autoincrement())
+  content   String
+  name      String
+  img       String
+  video     String?
+  material  Material[]
+  delete    Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+// 师资
+model Teach {
+  id        Int        @id @default(autoincrement())
+  type      String 
+  name      String
+  avatar    String
+  age       String
+  area          String
+  city          String?
+  province      String?
+  content   String?
+  gender    String
+  video     String?
+  delete    Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+
+// 机构
+model School {
+  id        Int        @id @default(autoincrement())
+  type      String  // 培训机构 or 学校
+  name      String
+  img       String?
+  area          String
+  city          String?
+  province      String?
+  content   String?
+  nature    String
+  school_type String
+  delete    Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
