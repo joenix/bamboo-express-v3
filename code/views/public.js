@@ -23,13 +23,16 @@ const upload_cfg = multer({ storage: storage });
 router.post('/upload', upload_cfg.array('files', 10), upload);
 router.get("/download", download);
 
+
 async function upload(req, res) {
+  let file_path = "https://api.lhdd.club"
+  // let file_path = "http://127.0.0.1:3000"
   try {
     res.send({
       status: 'success',
       files: req.files.map(file => ({
         filename: file.filename,
-        path: "http://127.0.0.1:3000/uploads/" + file.filename
+        path: file_path + "/uploads/" + file.filename
       }))
     });
   } catch (err) {
