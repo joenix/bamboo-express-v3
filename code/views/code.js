@@ -36,7 +36,7 @@ async function create_handle(req, res) {
   } catch (error) {
     res.json({
       status: 500,
-      msg: error
+      msg: '服务出现异常，请重试'
     })
   }
 }
@@ -74,7 +74,7 @@ async function update_handle(req, res) {
   } catch (error) {
     res.json({
       status: 500,
-      msg: error
+      msg: '服务出现异常，请重试'
     })
   }
 }
@@ -94,7 +94,7 @@ async function get_all_handle(req, res) {
   } catch (error) {
     res.json({
       status: 500,
-      msg: error
+      msg: '服务出现异常，请重试'
     })
   }
 }

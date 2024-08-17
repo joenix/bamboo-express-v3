@@ -46,7 +46,7 @@ async function update_user_info(req, res) {
   } catch (error) {
     res.json({
       status: 500,
-      msg: error
+      msg: '服务出现异常，请重试'
     })
   }
 
@@ -66,7 +66,7 @@ async function update_crtedit(req, res) {
   } catch (error) {
     res.json({
       status: 500,
-      msg: error
+      msg: '服务出现异常，请重试'
     })
   }
 }
@@ -116,7 +116,7 @@ async function update_handle(req, res) {
   } catch (error) {
     res.json({
       status: 500,
-      msg: error
+      msg: '服务出现异常，请重试'
     })
   }
 }
@@ -135,7 +135,7 @@ async function regist(req, res) {
   } catch (error) {
     res.json({
       status: 500,
-      msg: error
+      msg: '服务出现异常，请重试'
     })
   }
 }
@@ -153,7 +153,7 @@ async function get_all_users(req, res) {
   } catch (error) {
     res.json({
       status: 500,
-      msg: error
+      msg: '服务出现异常，请重试'
     })
   }
 }
