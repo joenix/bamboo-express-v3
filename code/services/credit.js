@@ -77,17 +77,17 @@ async function get_all(page = 1, pageSize = 10) {
     },
   });
 
-  const totalUsers = await prisma.Credit.count({
+  const counts = await prisma.Credit.count({
     where: {
       delete: false, // 假设 delete 是一个布尔类型的字段  
     },
   });
 
-  const totalPages = Math.ceil(totalUsers / pageSize);
+  const totalPages = Math.ceil(counts / pageSize);
 
   return {
     data: users,
-    totalUsers,
+    counts,
     totalPages,
     currentPage: page
   };

@@ -43,10 +43,10 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
     where: where
   });
 
-  const totalUsers = await prisma.Tips.count({
+  const counts = await prisma.Tips.count({
     where: where
   });
-  const totalPages = Math.ceil(totalUsers / pageSize);
+  const totalPages = Math.ceil(counts / pageSize);
 
   for (let i = 0; i < tips.length; i++) {
     const el = tips[i];
@@ -56,7 +56,7 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
 
   return {
     data: tips,
-    totalUsers,
+    counts,
     totalPages,
     currentPage: page
   };

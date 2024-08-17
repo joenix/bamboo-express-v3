@@ -49,14 +49,14 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
     el['video'] = await get_ids(el.video || "")
   }
 
-  const totalUsers = await prisma.Information.count({
+  const counts = await prisma.Information.count({
     where: where
   });
-  const totalPages = Math.ceil(totalUsers / pageSize);
+  const totalPages = Math.ceil(counts / pageSize);
 
   return {
     data: infos,
-    totalUsers,
+    counts,
     totalPages,
     currentPage: page
   };

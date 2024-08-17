@@ -42,14 +42,14 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
     where: where
   });
 
-  const totalUsers = await prisma.Permission.count({
+  const counts = await prisma.Permission.count({
     where: where
   });
-  const totalPages = Math.ceil(totalUsers / pageSize);
+  const totalPages = Math.ceil(counts / pageSize);
 
   return {
     data,
-    totalUsers,
+    counts,
     totalPages,
     currentPage: page
   };

@@ -42,7 +42,7 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
     where: where
   });
 
-  const totalUsers = await prisma.Role.count({
+  const counts = await prisma.Role.count({
     where: where
   });
   // 查询对应的 permission
@@ -50,11 +50,11 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
     const el = users[i];
     el["permissions"] = await get_ids(el.permissionId || "")
   }
-  const totalPages = Math.ceil(totalUsers / pageSize);
+  const totalPages = Math.ceil(counts / pageSize);
 
   return {
     data: users,
-    totalUsers,
+    counts,
     totalPages,
     currentPage: page
   };

@@ -47,14 +47,14 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
     el["img"] = await get_ids(el.img || "")
   }
 
-  const totalUsers = await prisma.Book.count({
+  const counts = await prisma.Book.count({
     where: where
   });
-  const totalPages = Math.ceil(totalUsers / pageSize);
+  const totalPages = Math.ceil(counts / pageSize);
 
   return {
     data: books,
-    totalUsers,
+    counts,
     totalPages,
     currentPage: page
   };

@@ -47,14 +47,14 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
     where: where
   });
 
-  const totalUsers = await prisma.BookHis.count({
+  const counts = await prisma.BookHis.count({
     where: where
   });
-  const totalPages = Math.ceil(totalUsers / pageSize);
+  const totalPages = Math.ceil(counts / pageSize);
 
   return {
     data: books,
-    totalUsers,
+    counts,
     totalPages,
     currentPage: page
   };

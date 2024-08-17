@@ -41,7 +41,7 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
     where: where
   });
 
-  const totalUsers = await prisma.Banner.count({
+  const counts = await prisma.Banner.count({
     where: where
   });
   for (let i = 0; i < banners.length; i++) {
@@ -49,11 +49,11 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
     el["img"] = await get_ids(el.img || "")
     el['video'] = await get_ids(el.video || "")
   }
-  const totalPages = Math.ceil(totalUsers / pageSize);
+  const totalPages = Math.ceil(counts / pageSize);
 
   return {
     data: banners,
-    totalUsers,
+    counts,
     totalPages,
     currentPage: page
   };
