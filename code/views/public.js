@@ -23,17 +23,20 @@ const upload_cfg = multer({ storage: storage });
 router.post('/upload', upload_cfg.array('files', 10), upload);
 router.get("/download", download);
 
+
 async function upload(req, res) {
+  let file_path = "https://api.lhdd.club"
+  // let file_path = "http://127.0.0.1:3000"
   try {
     res.send({
-      status: 'success',
+      status: 200,
       files: req.files.map(file => ({
         filename: file.filename,
-        path: "http://127.0.0.1:3000/uploads/" + file.filename
+        path: file_path + "/uploads/" + file.filename
       }))
     });
   } catch (err) {
-    res.status(400).send({ error: 'Multiple file upload failed' });
+    res.status(200).send({ status: 500, error: 'Multiple file upload failed' });
   }
 }
 
@@ -54,7 +57,7 @@ async function download(req, res) {
     // 下载文件
     res.download(filePath, fileName, (err) => {
       if (err) {
-        return res.status(500).send({ error: 'File download failed' });
+        return res.status(200).send({ status: 500, error: 'File download failed' });
       }
     });
   });

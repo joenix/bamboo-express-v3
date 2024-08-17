@@ -84,13 +84,13 @@ async function login(req, res) {
     const user = await find_username(username);
 
     if (!user) {
-      return res.status(401).json({ error: '用户不存在' });
+      return res.status(200).json({ status: 400, error: '用户不存在' });
     }
 
     // 验证密码
     const isPasswordValid = password == user.password;
     if (!isPasswordValid) {
-      return res.status(401).json({ error: '密码错误' });
+      return res.status(200).json({ status: 400, error: '密码错误' });
     }
 
     // 生成 JWT
@@ -99,7 +99,7 @@ async function login(req, res) {
     res.json({ status: 200, msg: token });
   } catch (error) {
     console.error('登录错误：', error);
-    res.status(500).json({ error: '服务器错误' });
+    res.status(200).json({ status: 500, error: '服务器错误' });
   }
 }
 function wx_login(req, res) {
