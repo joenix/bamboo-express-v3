@@ -121,7 +121,7 @@ async function update_handle(req, res) {
   }
 }
 
-
+// test
 async function regist(req, res) {
   try {
     const user = await create(req.body)
