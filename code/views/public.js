@@ -29,7 +29,7 @@ async function upload(req, res) {
   // let file_path = "http://127.0.0.1:3000"
   try {
     res.send({
-      status: 'success',
+      status: 200,
       files: req.files.map(file => ({
         filename: file.filename,
         path: file_path + "/uploads/" + file.filename
