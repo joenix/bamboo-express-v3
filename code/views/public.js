@@ -36,7 +36,7 @@ async function upload(req, res) {
       }))
     });
   } catch (err) {
-    res.status(400).send({ error: 'Multiple file upload failed' });
+    res.status(200).send({ status: 500, error: 'Multiple file upload failed' });
   }
 }
 
@@ -57,7 +57,7 @@ async function download(req, res) {
     // 下载文件
     res.download(filePath, fileName, (err) => {
       if (err) {
-        return res.status(500).send({ error: 'File download failed' });
+        return res.status(200).send({ status: 500, error: 'File download failed' });
       }
     });
   });

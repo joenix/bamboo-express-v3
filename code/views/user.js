@@ -99,7 +99,7 @@ async function login(req, res) {
     res.json({ status: 200, msg: token });
   } catch (error) {
     console.error('登录错误：', error);
-    res.status(500).json({ error: '服务器错误' });
+    res.status(200).json({ status: 500, error: '服务器错误' });
   }
 }
 function wx_login(req, res) {
