@@ -16,6 +16,9 @@ async function create_handle(req, res) {
     const user = await create(req.body)
     res.json({
       status: 200,
+      data: {
+        id: user.id
+      },
       msg: 'success',
     })
   } catch (error) {
