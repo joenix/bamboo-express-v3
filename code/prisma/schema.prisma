@@ -142,15 +142,15 @@ model Material {
 // 资讯
 model Information {
   id        Int        @id @default(autoincrement())
-  content   String
+  content   String?
   name      String
   img       String?
   video     String?
-  material  Material[]
-  type      String    @default("1")
-  delete    Boolean    @default(false)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  material  Material[]?
+  type      String?    @default("1")
+  delete    Boolean?    @default(false)
+  createdAt DateTime?   @default(now())
+  updatedAt DateTime?   @updatedAt
 }
 
 // Landing 活动页配置
