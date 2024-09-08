@@ -142,12 +142,12 @@ model Material {
 // 资讯
 model Information {
   id        Int        @id @default(autoincrement())
-  content   String
+  content   String     @default("")
   name      String
-  img       String
-  video     String
+  img       String     @default("")
+  video     String     @default("")
   material  Material[]
-  type      String    @default("1")
+  type      String     @default("1")
   delete    Boolean    @default(false)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
