@@ -7,18 +7,17 @@ const minimatch = require('minimatch').minimatch;
 const whitelist = [
   '/users/login',
   '/users/wxlogin', // 登录接口不需要验证JWT
-  '/public/*',  // 公共接口不需要验证JWT
-  "/users/regist",
-  "/uploads/*"
+  '/public/*', // 公共接口不需要验证JWT
+  '/users/regist',
+  '/uploads/*'
 ];
-
 
 // 密钥，用于生成和验证 JWT
 const JWT_SECRET = 'sixsixsix';
 
 // 生成 JWT
 function generateToken(user) {
-  return jwt.sign({ id: user.id, }, JWT_SECRET, { expiresIn: '24h' });
+  return jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '24h' });
 }
 
 // 验证 JWT
@@ -27,7 +26,7 @@ function verifyToken(req, res, next) {
   // 检查是否在白名单中
   for (const pattern of whitelist) {
     if (minimatch(path, pattern)) {
-      return next();  // 不验证JWT，继续下一个中间件或路由处理程序
+      return next(); // 不验证JWT，继续下一个中间件或路由处理程序
     }
   }
 
@@ -43,7 +42,7 @@ function verifyToken(req, res, next) {
     if (err) {
       return res.status(401).json({ error: 'Token invalid or expired' });
     }
-    req.user = decoded;  // 将解码后的用户信息存储到请求对象中，以便后续路由使用
+    req.user = decoded; // 将解码后的用户信息存储到请求对象中，以便后续路由使用
     next();
   });
 }

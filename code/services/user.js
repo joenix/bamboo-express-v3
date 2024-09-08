@@ -1,26 +1,26 @@
-const prisma = require("../utils/prisma")
+const prisma = require('../utils/prisma');
 
-const { get_id: get_role_id } = require("./role")
+const { get_id: get_role_id } = require('./role');
 
-const { generate_filters } = require("../utils/index")
+const { generate_filters } = require('../utils/index');
 
 // 创建
 async function create(body) {
-  let user
+  let user;
   try {
     user = await prisma.User.create({
-      data: body,
+      data: body
     });
   } catch (error) {
     throw error;
   }
-  return user
+  return user;
 }
 // 获取所有用户
 async function get_all(page = 1, pageSize = 10, filters = []) {
   const skip = (page - 1) * pageSize;
   const take = pageSize;
-  const where = generate_filters(filters)
+  const where = generate_filters(filters);
 
   const users = await prisma.User.findMany({
     skip: skip,
@@ -34,7 +34,7 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
   if (users) {
     for (let i = 0; i < users.length; i++) {
       const el = users[i];
-      el["roles"] = await get_role_id(el["roles"]?.id || 0)
+      el['roles'] = await get_role_id(el['roles']?.id || 0);
     }
   }
 
@@ -54,23 +54,24 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
 async function get_id(id) {
   const post = await prisma.User.findUnique({
     where: {
-      id: parseInt(id, 10), include: {
+      id: parseInt(id, 10),
+      include: {
         credits: true,
         roles: true
       }
-    },
+    }
   });
   if (post) {
     for (let i = 0; i < post.length; i++) {
       const el = post[i];
-      el["roles"] = await get_role_id(el["roles"]?.id)
+      el['roles'] = await get_role_id(el['roles']?.id);
     }
   }
 
   if (post) {
-    return post
+    return post;
   } else {
-    return null
+    return null;
   }
 }
 
@@ -90,27 +91,26 @@ async function find_username(username) {
   //   }
   // }
   if (post) {
-    return post
+    return post;
   } else {
-    return null
+    return null;
   }
 }
 
 // 更新  delete为true 则是删除
 async function update(id, updatedData) {
-  let updatedPermission
+  let updatedPermission;
   try {
     updatedPermission = await prisma.User.update({
       where: { id: id - 0 },
-      data: updatedData,
+      data: updatedData
     });
-    return updatedPermission
+    return updatedPermission;
   } catch (error) {
     throw error;
   }
-  return updatedPermission
+  return updatedPermission;
 }
-
 
 module.exports = {
   create,
@@ -118,7 +118,4 @@ module.exports = {
   get_id,
   update,
   find_username
-}
-
-
-
+};

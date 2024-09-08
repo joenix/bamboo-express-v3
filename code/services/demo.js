@@ -2,7 +2,7 @@
 app.post('/test', async (req, res) => {
   try {
     const post = await prisma.test.create({
-      data: req.body,
+      data: req.body
     });
     res.json(post);
   } catch (err) {
@@ -24,7 +24,7 @@ app.get('/test', async (req, res) => {
 app.get('/test/:id', async (req, res) => {
   try {
     const post = await prisma.test.findUnique({
-      where: { id: parseInt(req.params.id, 10) },
+      where: { id: parseInt(req.params.id, 10) }
     });
     if (post) {
       res.json(post);

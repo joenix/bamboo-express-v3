@@ -1,37 +1,37 @@
-const prisma = require("../utils/prisma")
-const { get_ids } = require("./material")
-const { generate_filters } = require("../utils/index")
+const prisma = require('../utils/prisma');
+const { get_ids } = require('./material');
+const { generate_filters } = require('../utils/index');
 
 // 创建
 async function create(body) {
-  let user
+  let user;
   try {
     user = await prisma.Book.create({
-      data: body,
+      data: body
     });
   } catch (error) {
     throw error;
   }
-  return user
+  return user;
 }
 
 // 更新  delete为true 则是删除
 async function update(id, updatedData) {
-  let updatedPermission
+  let updatedPermission;
   try {
     updatedPermission = await prisma.Book.update({
       where: { id: id - 0 },
-      data: updatedData,
+      data: updatedData
     });
-    return updatedPermission
+    return updatedPermission;
   } catch (error) {
     throw error;
   }
 }
 
-// 获取所有 
+// 获取所有
 async function get_all(page = 1, pageSize = 10, filters = []) {
-  const where = generate_filters(filters)
+  const where = generate_filters(filters);
   const skip = (page - 1) * pageSize;
   const take = pageSize;
 
@@ -43,8 +43,8 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
 
   for (let i = 0; i < books.length; i++) {
     const el = books[i];
-    el["url"] = await get_ids(el.url || "")
-    el["img"] = await get_ids(el.img || "")
+    el['url'] = await get_ids(el.url || '');
+    el['img'] = await get_ids(el.img || '');
   }
 
   const counts = await prisma.Book.count({
@@ -62,14 +62,14 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
 // 查询单个
 async function get_id(id) {
   const post = await prisma.Book.findUnique({
-    where: { id: parseInt(id, 10) },
+    where: { id: parseInt(id, 10) }
   });
   if (post) {
-    post["url"] = await get_ids(post.url || "")
-    post["img"] = await get_ids(post.img || "")
-    return post
+    post['url'] = await get_ids(post.url || '');
+    post['img'] = await get_ids(post.img || '');
+    return post;
   } else {
-    return null
+    return null;
   }
 }
 
@@ -88,23 +88,21 @@ async function get_books_code_user(user_id) {
     }
   });
   if (!books || !codes) {
-    return []
+    return [];
   }
   // 设置是否激活状态
   for (let index = 0; index < books.length; index++) {
     const book = books[index];
     for (let index = 0; index < books.length; index++) {
       const code = booksbooks[index];
-      book['active'] = false
+      book['active'] = false;
       if (code.bookId == book.id && code.active) {
-        book['active'] = true
+        book['active'] = true;
       }
     }
   }
-  return book
+  return book;
 }
-
-
 
 module.exports = {
   create,
@@ -112,7 +110,4 @@ module.exports = {
   get_id,
   update,
   get_books_code_user
-}
-
-
-
+};

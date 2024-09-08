@@ -1,40 +1,40 @@
-const prisma = require("../utils/prisma")
-const { get_ids } = require("./permission")
-const { generate_filters } = require("../utils/index")
+const prisma = require('../utils/prisma');
+const { get_ids } = require('./permission');
+const { generate_filters } = require('../utils/index');
 
 // 创建
 async function create(body) {
-  let user
+  let user;
   try {
     user = await prisma.Role.create({
-      data: body,
+      data: body
     });
   } catch (error) {
     throw error;
   }
-  return user
+  return user;
 }
 
 // 更新  delete为true 则是删除
 async function update(id, updatedData) {
-  let updatedPermission
+  let updatedPermission;
   try {
     updatedPermission = await prisma.Role.update({
       where: { id: id - 0 },
-      data: updatedData,
+      data: updatedData
     });
-    return updatedPermission
+    return updatedPermission;
   } catch (error) {
     throw error;
   }
-  return updatedPermission
+  return updatedPermission;
 }
 
-// 获取所有 
+// 获取所有
 async function get_all(page = 1, pageSize = 10, filters = []) {
   const skip = (page - 1) * pageSize;
   const take = pageSize;
-  const where = generate_filters(filters)
+  const where = generate_filters(filters);
 
   const users = await prisma.Role.findMany({
     skip: skip,
@@ -48,7 +48,7 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
   // 查询对应的 permission
   for (let i = 0; i < users.length; i++) {
     const el = users[i];
-    el["permissions"] = await get_ids(el.permissionId || "")
+    el['permissions'] = await get_ids(el.permissionId || '');
   }
   const totalPages = Math.ceil(counts / pageSize);
 
@@ -59,31 +59,27 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
     currentPage: page
   };
 }
-// 查询单个 
+// 查询单个
 async function get_id(id) {
   try {
     const post = await prisma.Role.findUnique({
-      where: { id: parseInt(id, 10) },
+      where: { id: parseInt(id, 10) }
     });
     // 查询对应的 permission
-    post["permissions"] = await get_ids(post.permissionId || "")
+    post['permissions'] = await get_ids(post.permissionId || '');
     if (post) {
-      return post
+      return post;
     } else {
-      return null
+      return null;
     }
   } catch (error) {
-    return null
+    return null;
   }
 }
-
 
 module.exports = {
   create,
   get_all,
   get_id,
   update
-}
-
-
-
+};
