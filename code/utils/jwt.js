@@ -9,7 +9,10 @@ const whitelist = [
   '/users/wxlogin', // 登录接口不需要验证JWT
   '/public/*', // 公共接口不需要验证JWT
   '/users/regist',
-  '/uploads/*'
+  '/uploads/*',
+
+  // Add by Joenix
+  '/infomation/get_all'
 ];
 
 // 密钥，用于生成和验证 JWT
