@@ -4,7 +4,8 @@
   "description": "后台",
   "main": "index.js",
   "scripts": {
-    "dev": "node index.js"
+    "dev": "node index.js",
+    "restart": "pm2 restart api"
   },
   "repository": {
     "type": "git",
