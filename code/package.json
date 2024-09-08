@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node index.js",
+    "update": "npx prisma migrate dev --name init",
     "restart": "pm2 restart api"
   },
   "repository": {
