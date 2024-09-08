@@ -146,7 +146,7 @@ model Information {
   name      String
   img       String?
   video     String?
-  material  Material[]?
+  material  Material[]
   type      String?    @default("1")
   delete    Boolean?    @default(false)
   createdAt DateTime?   @default(now())
