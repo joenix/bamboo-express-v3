@@ -12,7 +12,8 @@ const whitelist = [
   '/uploads/*',
 
   // Add by Joenix
-  '/infomation/get_all'
+  '/infomation/get_all',
+  '/tips/get_all'
 ];
 
 // 密钥，用于生成和验证 JWT
