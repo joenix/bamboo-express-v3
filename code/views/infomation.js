@@ -60,11 +60,13 @@ async function get_all_handle(req, res) {
 
 async function get_id_handle(req, res) {
   try {
+    const a = req.body;
+
     res.json({
       status: 200,
       msg: {
-        ...req.body,
-        a: 1
+        a,
+        b: 2
       }
     });
     const id = req.query.id;
