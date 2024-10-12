@@ -63,7 +63,7 @@ async function get_id_handle(req, res) {
     res.json({
       status: 200,
       msg: {
-        ...req.query,
+        req,
         a: 1
       }
     });
