@@ -54,6 +54,7 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
     currentPage: page
   };
 }
+
 // 查询单个权限
 async function get_id(id) {
   const post = await prisma.Permission.findUnique({

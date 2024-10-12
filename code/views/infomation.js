@@ -5,6 +5,7 @@ const { create, update, get_all, get_id } = require('../services/infomation');
 router.route('/create').post(create_handle);
 router.route('/update').post(update_handle);
 router.route('/get_all').post(get_all_handle);
+router.route('/get_id').post(get_id_handle);
 
 async function create_handle(req, res) {
   try {
@@ -45,6 +46,22 @@ async function get_all_handle(req, res) {
     const pageSize = parseInt(req.query.pageSize) || 10;
     const filters = req.body.filters || [];
     let ress = await get_all(page, pageSize, filters);
+    res.json({
+      status: 200,
+      msg: ress
+    });
+  } catch (error) {
+    res.json({
+      status: 500,
+      msg: '服务出现异常，请重试'
+    });
+  }
+}
+
+async function get_id_handle(req, res) {
+  try {
+    const id = parseInt(req.query.id);
+    let ress = await get_id(id);
     res.json({
       status: 200,
       msg: ress
