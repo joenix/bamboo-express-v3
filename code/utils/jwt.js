@@ -13,6 +13,7 @@ const whitelist = [
 
   // Add by Joenix
   '/infomation/get_all',
+  '/infomation/get_id',
   '/tips/get_all'
 ];
 
