@@ -60,20 +60,11 @@ async function get_all_handle(req, res) {
 
 async function get_id_handle(req, res) {
   try {
-    const a = req.body;
-
+    const { id } = req.body;
+    const msg = await get_id(id);
     res.json({
       status: 200,
-      msg: {
-        a,
-        b: 2
-      }
-    });
-    const id = req.query.id;
-    let ress = await get_id(id);
-    res.json({
-      status: 200,
-      msg: ress
+      msg
     });
   } catch (error) {
     res.json({
