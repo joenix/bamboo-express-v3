@@ -62,7 +62,10 @@ async function get_id_handle(req, res) {
   try {
     res.json({
       status: 200,
-      msg: req.query
+      msg: {
+        ...req.query,
+        a: 1
+      }
     });
     const id = req.query.id;
     let ress = await get_id(id);
