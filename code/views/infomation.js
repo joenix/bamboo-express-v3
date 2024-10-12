@@ -60,8 +60,11 @@ async function get_all_handle(req, res) {
 
 async function get_id_handle(req, res) {
   try {
-    const id = parseInt(req.query.id);
-    console.log(64, id);
+    res.json({
+      status: 200,
+      msg: req.query
+    });
+    const id = req.query.id;
     let ress = await get_id(id);
     res.json({
       status: 200,
