@@ -101,8 +101,8 @@ async function find_token(token) {
   const post = await prisma.User.findUnique({
     where: { token: token },
     include: {
-      credits: true,
-      roles: true
+      // credits: true,
+      // roles: true
     }
   });
 
