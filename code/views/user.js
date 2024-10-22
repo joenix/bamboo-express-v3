@@ -140,9 +140,7 @@ async function get_all_users(req, res) {
 async function get_user_info(req, res) {
   try {
     const { token } = req.query || '';
-    console.log(143, token);
     const response = await find_token(token);
-    console.log(145, response);
 
     res.json({
       status: 200,
@@ -151,7 +149,7 @@ async function get_user_info(req, res) {
   } catch (error) {
     res.json({
       status: 500,
-      msg: '服务出现异常，请重试'
+      msg: error // '服务出现异常，请重试'
     });
   }
 }
