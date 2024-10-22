@@ -140,7 +140,9 @@ async function get_all_users(req, res) {
 async function get_user_info(req, res) {
   try {
     const { token } = req.query || '';
+    console.log(143, token);
     const response = await find_token(token);
+    console.log(145, response);
 
     res.json({
       status: 200,
