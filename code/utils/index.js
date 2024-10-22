@@ -15,6 +15,15 @@ function generate_filters(filters = []) {
   return where;
 }
 
+async function catcher(resolve, reject) {
+  try {
+    return await resolve();
+  } catch (e) {
+    await reject(e);
+  }
+}
+
 module.exports = {
+  catcher,
   generate_filters
 };

@@ -9,6 +9,8 @@ const publics = require('./views/public');
 
 const file_path = pro_cfg['STATIC_PATH'];
 
+const wechat = require('./wechat/index');
+
 const users = require('./views/user');
 const infomation = require('./views/infomation');
 const permission = require('./views/permission');
@@ -27,6 +29,7 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true })); // 解析URL编码请求体
 app.use(verifyToken);
 
+app.use('/wechat', wechat);
 app.use('/material', material);
 app.use('/code', code);
 app.use('/school', school);

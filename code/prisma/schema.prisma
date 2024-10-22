@@ -44,6 +44,8 @@ model User {
   code          Code[]
   User_Code     User_Code[]
   delete    Boolean  @default(false)
+  mobile        String?
+  token         String?
 }
 
 // 用户拥有那些code 
