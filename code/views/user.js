@@ -139,7 +139,7 @@ async function get_all_users(req, res) {
 // Code by Joenix
 async function get_user_info(req, res) {
   try {
-    const { token } = req.query || '';
+    const { token = '' } = req.body;
     const response = await find_token(token);
 
     res.json({
