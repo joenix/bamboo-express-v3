@@ -3,7 +3,7 @@ const axios = require('axios');
 const bcrypt = require('bcrypt');
 
 const { generateToken } = require('../utils/jwt');
-const { create, get_all, update, find_username, get_id, find_token } = require('../services/user');
+const { create, get_all, update, find_username, get_id, find_token, find_userinfo } = require('../services/user');
 
 const { create: init_credit } = require('../services/credit');
 const { create: create_userinfo } = require('../services/userinfo');
@@ -16,6 +16,7 @@ router.route('/update').post(update_handle);
 router.route('/wx_login').post(wx_login);
 router.route('/get_all').post(get_all_users);
 router.route('/get_info').post(get_user_info);
+router.route('/get_data').post(get_user_data);
 router.route('/update_crtedit').post(update_crtedit);
 router.route('/update_user_info').post(update_user_info);
 
@@ -139,8 +140,25 @@ async function get_all_users(req, res) {
 // Code by Joenix
 async function get_user_info(req, res) {
   try {
-    const { token } = req.body;
+    const { token, id } = req.body;
     const response = await find_token(token);
+
+    res.json({
+      status: 200,
+      msg: response
+    });
+  } catch (error) {
+    res.json({
+      status: 500,
+      msg: error // '服务出现异常，请重试'
+    });
+  }
+}
+
+async function get_user_data(req, res) {
+  try {
+    const { userId } = req.body;
+    const response = await find_userinfo(userId);
 
     res.json({
       status: 200,

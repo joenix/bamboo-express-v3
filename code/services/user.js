@@ -113,6 +113,18 @@ async function find_token(token) {
   }
 }
 
+async function find_userinfo(userId) {
+  const post = await prisma.User_Info.findUnique({
+    where: { userId: userId }
+  });
+
+  if (post) {
+    return post;
+  } else {
+    return null;
+  }
+}
+
 // 更新  delete为true 则是删除
 async function update(id, updatedData) {
   let updatedPermission;
@@ -134,5 +146,6 @@ module.exports = {
   get_id,
   update,
   find_username,
-  find_token
+  find_token,
+  find_userinfo
 };
