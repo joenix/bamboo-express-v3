@@ -81,8 +81,39 @@ async function login(req, res) {
     res.status(200).json({ status: 500, error: '服务器错误' });
   }
 }
-function wx_login(req, res) {
-  res.json(200);
+async function wx_login(req, res) {
+  let { mobile, captcha, password } = req.body;
+
+  if (!password) {
+    password = captcha;
+  }
+
+  try {
+    let user = await find_username(mobile);
+
+    if (!user) {
+      // 如果没有用户就创建一个
+      await create({
+        username: mobile,
+        mobile: mobile,
+        password: password
+      });
+    }
+
+    // 验证密码
+    const isPasswordValid = password == user.password;
+    if (!isPasswordValid) {
+      return res.status(200).json({ status: 400, error: '密码错误' });
+    }
+
+    // 生成 JWT
+    const token = generateToken({ id: user.id });
+
+    res.json({ status: 200, msg: token });
+  } catch (e) {
+    console.error('登录错误：', error);
+    res.status(200).json({ status: 500, error: '服务器错误' });
+  }
 }
 
 async function update_handle(req, res) {
