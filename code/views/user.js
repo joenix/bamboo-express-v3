@@ -100,10 +100,12 @@ async function wx_login(req, res) {
       });
     }
 
+    user = await find_username(mobile);
+
     // 验证密码
     const isPasswordValid = password == user.password;
     if (!isPasswordValid) {
-      return res.status(200).json({ status: 400, error: '密码错误' });
+      return res.status(200).json({ status: 500, error: '密码错误' });
     }
 
     // 生成 JWT
