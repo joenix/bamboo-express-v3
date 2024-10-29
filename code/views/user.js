@@ -111,6 +111,10 @@ async function wx_login(req, res) {
     // 生成 JWT
     const token = generateToken({ id: user.id });
 
+    console.log(114, user.id);
+    // 更新 token 字段
+    await update(user.id, { token });
+
     res.json({ status: 200, msg: token });
   } catch (e) {
     console.error('登录错误：', error);
