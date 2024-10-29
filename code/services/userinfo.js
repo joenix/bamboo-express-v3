@@ -3,7 +3,6 @@ const { generate_filters } = require('../utils/index');
 
 // 创建
 async function create(body) {
-  console.log(6, body);
   let user;
   try {
     user = await prisma.User_Info.create({
@@ -17,6 +16,7 @@ async function create(body) {
 
 // 更新  delete为true 则是删除
 async function update(id, updatedData) {
+  console.log(7, id, updatedData);
   let updatedPermission;
   try {
     updatedPermission = await prisma.User_Info.update({
