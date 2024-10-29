@@ -193,6 +193,7 @@ async function get_user_data(req, res) {
     const { userId } = req.body;
     console.log(194, userId);
     const response = await find_userinfo(userId);
+    console.log(196, response);
 
     res.json({
       status: 200,
