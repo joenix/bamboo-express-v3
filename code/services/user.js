@@ -114,12 +114,9 @@ async function find_token(token) {
 }
 
 async function find_userinfo(userId) {
-  console.log(117, userId, parseInt(userId, 10));
-  const post = await prisma.User_Info.findUnique({
+  const post = await prisma.User_Info.findMany({
     where: { userId: parseInt(userId, 10) }
   });
-
-  console.log(121, post);
 
   if (post) {
     return post;
