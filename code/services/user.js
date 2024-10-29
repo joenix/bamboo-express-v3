@@ -114,7 +114,7 @@ async function find_token(token) {
 }
 
 async function find_userinfo(userId) {
-  console.log(117, userId);
+  console.log(117, userId, parseInt(userId, 10));
   const post = await prisma.User_Info.findUnique({
     where: { userId: parseInt(userId, 10) }
   });
