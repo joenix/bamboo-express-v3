@@ -3,6 +3,7 @@ const { generate_filters } = require('../utils/index');
 
 // 创建
 async function create(body) {
+  console.log(6, body);
   let user;
   try {
     user = await prisma.User_Info.create({
