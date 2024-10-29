@@ -16,7 +16,6 @@ async function create(body) {
 
 // 更新  delete为true 则是删除
 async function update(id, updatedData) {
-  console.log(7, id, updatedData);
   let updatedPermission;
   try {
     updatedPermission = await prisma.User_Info.update({
