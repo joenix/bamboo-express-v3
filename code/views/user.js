@@ -6,7 +6,7 @@ const { generateToken } = require('../utils/jwt');
 const { create, get_all, update, find_username, get_id, find_token, find_userinfo } = require('../services/user');
 
 const { create: init_credit } = require('../services/credit');
-const { create: create_userinfo } = require('../services/userinfo');
+const { create: create_userinfo, update: update_userinfo } = require('../services/userinfo');
 
 const { update_crtedit_his } = require('../services/credit');
 
@@ -23,11 +23,13 @@ router.route('/update_user_info').post(update_user_info);
 // 更新部分用户信息， 视力，身高，体重
 async function update_user_info(req, res) {
   try {
+    const { id, ...updateInfo } = req.body;
+
     // 创建记录
-    await create_userinfo(req.body);
+    const result = await update_userinfo(id, updateInfo);
     res.json({
       status: 200,
-      msg: 'success'
+      msg: result
     });
   } catch (error) {
     res.json({
@@ -41,6 +43,7 @@ async function update_crtedit(req, res) {
   try {
     const userid = parseInt(req.body.userid) || 0;
     const credit = parseInt(req.body.credit) || 1;
+
     // 更新学分
     await update_crtedit_his(userid, credit);
     res.json({
