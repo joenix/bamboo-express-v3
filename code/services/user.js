@@ -118,6 +118,8 @@ async function find_userinfo(userId) {
     where: { userId: parseInt(userId, 10) }
   });
 
+  console.log(121, post);
+
   if (post) {
     return post;
   } else {
