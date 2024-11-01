@@ -18,6 +18,8 @@ async function create(body) {
 async function update(id, updatedData) {
   let updatedPermission;
   try {
+    console.log(21, updatedData);
+
     updatedPermission = await prisma.User_Info.update({
       where: { id: id - 0 },
       data: updatedData
