@@ -2,7 +2,7 @@ const prisma = require('../utils/prisma');
 const { update_crtedit_his } = require('./credit');
 const { createOrUpdateBookHisCount } = require('./bookhiscount');
 const { generate_filters } = require('../utils/index');
-
+const { get_id: get_user_byid } = require('./user');
 // 创建
 async function create(body, credit) {
   let bookhis;
@@ -71,9 +71,53 @@ async function get_id(id) {
   }
 }
 
+// 排行榜 
+async function get_select_all(isToday = true) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // 设置为当天的开始时间
+
+  const where = {
+    ...(isToday ? { createdAt: { gte: today } } : {}), // 如果是当天，加入时间筛选条件
+  };
+
+  const result = await prisma.bookHis.groupBy({
+    by: ['userId'], // 按用户分组
+    where, // 根据 isToday 参数动态设置 where 条件
+    _sum: {
+      time: true, // 统计 time 的总和
+    },
+    orderBy: {
+      _sum: {
+        time: 'desc', // 按 time 总和降序排列
+      },
+    },
+    take: 100, // 只取前20名
+  });
+
+  for (let i = 0; i < result.length; i++) {
+    let id = result[i]["userId"]
+    if (id) {
+      try {
+        console.log("id", id)
+        result[i]["user"] = await get_user_byid(id)
+      } catch (error) {
+        console.log("error", error)
+      }
+    }
+  }
+
+
+
+  return {
+    data: result,
+  };
+}
+
+
 module.exports = {
   create,
   get_all,
   get_id,
-  update
+  update,
+  get_select_all
 };

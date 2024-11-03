@@ -75,7 +75,7 @@ async function get_id(id) {
 
 async function get_books_code_user(user_id) {
   // 获取当前所有的book
-  const books = await prisma.Books.findMany({
+  const books = await prisma.Book.findMany({
     where: {
       delete: false
     }
@@ -87,21 +87,26 @@ async function get_books_code_user(user_id) {
       userId: user_id
     }
   });
+  console.log("codes", codes)
   if (!books || !codes) {
     return [];
   }
+  let all_book = []
   // 设置是否激活状态
   for (let index = 0; index < books.length; index++) {
     const book = books[index];
-    for (let index = 0; index < books.length; index++) {
-      const code = booksbooks[index];
+    for (let J = 0; J < books.length; J++) {
+      const code = codes[J];
       book['active'] = false;
-      if (code.bookId == book.id && code.active) {
+
+      if (code?.bookId == book?.id && code?.active) {
         book['active'] = true;
       }
+
     }
+    all_book.push(book)
   }
-  return book;
+  return all_book;
 }
 
 module.exports = {

@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE `Information` MODIFY `content` VARCHAR(191) NOT NULL DEFAULT '',
+    MODIFY `img` VARCHAR(191) NOT NULL DEFAULT '',
+    MODIFY `video` VARCHAR(191) NOT NULL DEFAULT '';
