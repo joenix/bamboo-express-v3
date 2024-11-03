@@ -17,8 +17,7 @@ async function ranks_today(req, res) {
     const data = await get_select_all(true)
     res.json({
       status: 200,
-      data,
-      msg: 'success'
+      msg: data
     });
   } catch (error) {
     res.json({
@@ -33,8 +32,7 @@ async function ranks(req, res) {
     const data = await get_select_all(false)
     res.json({
       status: 200,
-      data,
-      msg: 'success'
+      msg: data
     });
   } catch (error) {
     res.json({
