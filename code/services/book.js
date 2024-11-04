@@ -87,6 +87,11 @@ async function get_books_code_user(user_id) {
       userId: user_id
     }
   });
+  // 获取当天的开始和结束时间
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+  const endOfDay = new Date();
+  endOfDay.setHours(23, 59, 59, 999);
   console.log("codes", codes)
   if (!books || !codes) {
     return [];
@@ -95,12 +100,44 @@ async function get_books_code_user(user_id) {
   // 设置是否激活状态
   for (let index = 0; index < books.length; index++) {
     const book = books[index];
-    for (let J = 0; J < books.length; J++) {
+    book["read_count"] = 0
+    const distinctUserCount = await prisma.bookHis.groupBy({
+      by: ['userId'],
+      where: {
+        bookId: book?.id,
+        delete: false,
+      },
+      _count: {
+        _all: true,
+      },
+    });
+    book["read_count"] = distinctUserCount?.length || 0
+    for (let J = 0; J < codes.length; J++) {
       const code = codes[J];
       book['active'] = false;
 
+      book["today_count"] = 0
+      book["today_time"] = 0
+
       if (code?.bookId == book?.id && code?.active) {
         book['active'] = true;
+        const result = await prisma.bookHis.aggregate({
+          _sum: {
+            count: true,
+            time: true,
+          },
+          where: {
+            userId: user_id,
+            bookId: book?.id,
+            createdAt: {
+              gte: startOfDay,
+              lte: endOfDay,
+            },
+            delete: false, // 排除已标记为删除的记录
+          },
+        });
+        book["today_count"] = result._sum.count || 0
+        book["today_time"] = result._sum.time || 0
       }
 
     }
