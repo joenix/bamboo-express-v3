@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { create, update, get_all, get_id, get_books_code_user } = require('../services/book');
+const { create, update, get_all, get_id, get_books_code_user, getDaysWithRecordsForMonth } = require('../services/book');
 
 const { create: create_his, get_select_all } = require('../services/bookhis');
 
@@ -11,6 +11,7 @@ router.route('/book_his').post(book_his_handle);
 router.route('/wx_get_books').post(wx_get_books);
 router.route("/wx_ranks_today").post(ranks_today)
 router.route("/wx_ranks").post(ranks)
+router.route("/get_all_records").post(get_all_records)
 
 async function ranks_today(req, res) {
   try {
@@ -127,5 +128,25 @@ async function get_all_handle(req, res) {
     });
   }
 }
+async function get_all_records(req, res) {
+  try {
+    const userid = parseInt(req.body.userid) || 0;
+    const year = parseInt(req.body.year) || 2024;
+    const month = parseInt(req.body.month) || 1;
+    let ress = await getDaysWithRecordsForMonth(userid, year, month);
+    res.json({
+      status: 200,
+      msg: ress
+    });
+  } catch (error) {
+    console.log(error)
+    res.json({
+      status: 500,
+      msg: '服务出现异常，请重试'
+    });
+  }
+}
+
+
 
 module.exports = router;

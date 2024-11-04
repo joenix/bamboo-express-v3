@@ -29,6 +29,38 @@ async function update(id, updatedData) {
   }
 }
 
+// 获取当前用户在某一年某一月的完成记录
+
+async function getDaysWithRecordsForMonth(userId, year, month) {
+  // 查询指定用户在某年某月的记录
+  const result = await prisma.bookHis.findMany({
+    where: {
+      userId,
+      delete: false,
+      createdAt: {
+        gte: new Date(Date.UTC(year, month - 1, 1)), // 月份从0开始
+        lt: new Date(Date.UTC(year, month, 1)),      // 下个月的第一天
+      },
+    },
+    select: {
+      createdAt: true,
+    },
+  });
+
+  // 提取唯一的日期（去重）并返回 UTC 零点的时间戳
+  const uniqueDays = Array.from(
+    new Set(
+      result.map(record => {
+        const date = new Date(record.createdAt);
+        date.setUTCHours(0, 0, 0, 0); // 设置为当天 UTC 零点
+        return date.getTime();
+      })
+    )
+  );
+
+  return uniqueDays;
+}
+
 // 获取所有
 async function get_all(page = 1, pageSize = 10, filters = []) {
   const where = generate_filters(filters);
@@ -151,5 +183,6 @@ module.exports = {
   get_all,
   get_id,
   update,
-  get_books_code_user
+  get_books_code_user,
+  getDaysWithRecordsForMonth
 };
