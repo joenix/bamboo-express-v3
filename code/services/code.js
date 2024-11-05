@@ -19,6 +19,18 @@ async function create(body) {
 async function update(bookid, userid, code) {
   let updatedPermission;
   try {
+    // 查询当前 code 的状态
+    const existingCode = await prisma.Code.findUnique({
+      where: { code: code, bookId: bookid },
+      select: { active: true }
+    });
+
+    // 如果 active 为 true，则返回 false，不执行更新
+    if (existingCode?.active) {
+      return false;
+    }
+
+    // 否则更新 userId 和 active
     updatedPermission = await prisma.Code.update({
       where: { code: code, bookId: bookid },
       data: {
@@ -26,6 +38,7 @@ async function update(bookid, userid, code) {
         active: true
       }
     });
+
     return updatedPermission;
   } catch (error) {
     throw error;

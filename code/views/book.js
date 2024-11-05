@@ -137,7 +137,9 @@ async function get_all_records(req, res) {
     let ress = await getDaysWithRecordsForMonth(userid, year, month);
     res.json({
       status: 200,
-      msg: ress
+      msg: {
+        data: ress
+      }
     });
   } catch (error) {
     console.log(error)
