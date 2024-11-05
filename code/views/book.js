@@ -48,8 +48,7 @@ async function wx_get_books(req, res) {
     let data = await get_books_code_user(req.user.id);
     res.json({
       status: 200,
-      data,
-      msg: 'success'
+      msg: data
     });
   } catch (error) {
     console.log("error", error)
