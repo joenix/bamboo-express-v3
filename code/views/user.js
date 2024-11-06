@@ -6,7 +6,7 @@ const { generateToken } = require('../utils/jwt');
 const { create, get_all, update, find_username, get_id, find_token, find_userinfo } = require('../services/user');
 
 const { create: init_credit } = require('../services/credit');
-const { create: create_userinfo, update: update_userinfo, get_userinfo_report } = require('../services/userinfo');
+const { create: create_userinfo, update: update_userinfo, get_userinfo_report, get_item } = require('../services/userinfo');
 
 const { update_crtedit_his } = require('../services/credit');
 
@@ -21,11 +21,31 @@ router.route('/update_crtedit').post(update_crtedit);
 router.route('/update_user_info').post(update_user_info);
 router.route('/get_user_report').post(get_user_report);
 router.route('/set_user_info').post(set_user_info);
+router.route('/get_user_info_item').post(get_user_info_item);
+
 // 创建用户信息报告
 async function set_user_info(req, res) {
   try {
     // 创建记录
     const result = await create_userinfo(req.body);
+    res.json({
+      status: 200,
+      msg: result
+    });
+  } catch (error) {
+    console.log("error", error)
+    res.json({
+      status: 500,
+      msg: '服务出现异常，请重试'
+    });
+  }
+}
+
+async function get_user_info_item(req, res) {
+  try {
+    const { id } = req.body
+    // 创建记录
+    const result = await get_item(id);
     res.json({
       status: 200,
       msg: result

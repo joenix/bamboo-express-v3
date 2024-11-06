@@ -108,10 +108,29 @@ async function get_userinfo_report(id, limt = 7) {
   }
 }
 
+async function get_item(userId) {
+  const latestUserInfo = await prisma.user_Info.findFirst({
+    where: {
+      userId: userId, // 当前用户的ID
+      delete: false,   // 确保数据没有被标记为删除
+    },
+    orderBy: {
+      createdAt: 'desc', // 按 createdAt 字段降序排列，最新的记录在前
+    },
+  });
+  if (latestUserInfo) {
+    return latestUserInfo;
+  } else {
+    return null;
+  }
+
+}
+
 module.exports = {
   create,
   get_all,
   get_id,
   update,
-  get_userinfo_report
+  get_userinfo_report,
+  get_item
 };
