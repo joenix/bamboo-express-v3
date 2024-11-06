@@ -61,8 +61,48 @@ async function get_id(id) {
   const post = await prisma.User_Info.findUnique({
     where: { id: parseInt(id, 10) }
   });
+
   if (post) {
     return post;
+  } else {
+    return null;
+  }
+}
+
+async function get_userinfo_report(id, limt = 7) {
+  const userId = parseInt(id, 10); // 替换为你要查询的用户 ID
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - limt); // 获取最近 limt 天的开始日期
+
+  // 查询用户对应天数内的所有记录
+  const allRecords = await prisma.user_Info.findMany({
+    where: {
+      userId: userId,
+      delete: false,
+      createdAt: {
+        gte: startDate,
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+
+  // 按天分组并获取每日最晚的记录
+  const dailyLatestRecords = [];
+  const seenDates = new Set();
+
+  for (const record of allRecords) {
+    const recordDate = record.createdAt.toISOString().split('T')[0]; // 仅获取日期部分
+    if (!seenDates.has(recordDate)) {
+      dailyLatestRecords.push(record); // 记录每日的最晚一条
+      seenDates.add(recordDate); // 标记该日期已处理
+    }
+  }
+
+
+  if (dailyLatestRecords) {
+    return dailyLatestRecords;
   } else {
     return null;
   }
@@ -72,5 +112,6 @@ module.exports = {
   create,
   get_all,
   get_id,
-  update
+  update,
+  get_userinfo_report
 };
