@@ -26,13 +26,15 @@ async function create(userid) {
 }
 
 // 更新 学分记录表
-async function update_crtedit_his(userid, credit) {
+async function update_crtedit_his(userid, credit, content) {
   let updatedPermission;
+  console.log("content", content)
   try {
     updatedPermission = await prisma.CreditHis.create({
       data: {
         userId: userid,
-        credit: credit - 0
+        credit: credit - 0,
+        content
       }
     });
     await update(userid, credit);
@@ -42,26 +44,38 @@ async function update_crtedit_his(userid, credit) {
   }
 }
 
-// 更新  delete为true 则是删除
+
 async function update(userid, credit) {
   console.log('credit', credit);
-  let updatedPermission;
-  let obj = {};
   credit = credit - 0;
-  obj = { increment: credit };
+  const obj = { increment: credit };
+
   try {
-    updatedPermission = await prisma.Credit.update({
+    // 尝试更新记录
+    const updatedPermission = await prisma.Credit.update({
       where: { userId: userid - 0 },
-      data: {
-        credit: obj
-      }
+      data: { credit: obj }
     });
     return updatedPermission;
   } catch (error) {
-    console.log('update', error);
-    throw error;
+    // 如果记录不存在（P2025 错误），则创建新记录
+    if (error.code === 'P2025') {
+      console.log('Record not found, creating a new record...');
+      const createdPermission = await prisma.Credit.create({
+        data: {
+          userId: userid,
+          credit: credit // 使用 `credit` 初始化
+        }
+      });
+      return createdPermission;
+    } else {
+      // 其他错误则抛出
+      console.log('update error', error);
+      throw error;
+    }
   }
 }
+
 
 // 获取所有
 async function get_all(page = 1, pageSize = 10) {
@@ -104,11 +118,30 @@ async function get_id(id) {
     return null;
   }
 }
+// 查询单个
+async function get_credit_his(id) {
+  const post = await prisma.creditHis.findMany({
+    where: {
+      userId: id,
+      delete: false // 仅查询未删除的记录
+    },
+    orderBy: {
+      createdAt: 'desc' // 按创建时间降序排列，显示最新记录在前
+    }
+  });
+  if (post) {
+    return post;
+  } else {
+    return null;
+  }
+}
+
 
 module.exports = {
   create,
   get_all,
   get_id,
   update,
-  update_crtedit_his
+  update_crtedit_his,
+  get_credit_his
 };

@@ -8,7 +8,7 @@ const { create, get_all, update, find_username, get_id, find_token, find_userinf
 const { create: init_credit } = require('../services/credit');
 const { create: create_userinfo, update: update_userinfo, get_userinfo_report, get_item } = require('../services/userinfo');
 
-const { update_crtedit_his } = require('../services/credit');
+const { update_crtedit_his, get_credit_his } = require('../services/credit');
 
 router.route('/login').post(login);
 router.route('/regist').post(regist);
@@ -22,6 +22,26 @@ router.route('/update_user_info').post(update_user_info);
 router.route('/get_user_report').post(get_user_report);
 router.route('/set_user_info').post(set_user_info);
 router.route('/get_user_info_item').post(get_user_info_item);
+router.route('/get_credit_his').post(get_credit_his_service);
+
+// 获取积分
+async function get_credit_his_service(req, res) {
+  try {
+    const { userid } = req.body
+    const result = await get_credit_his(userid);
+    res.json({
+      status: 200,
+      msg: result
+    });
+  } catch (error) {
+    console.log("error", error)
+    res.json({
+      status: 500,
+      msg: '服务出现异常，请重试'
+    });
+  }
+}
+
 
 // 创建用户信息报告
 async function set_user_info(req, res) {
@@ -101,9 +121,10 @@ async function update_crtedit(req, res) {
   try {
     const userid = parseInt(req.body.userid) || 0;
     const credit = parseInt(req.body.credit) || 1;
+    const content = req.body.content || "";
 
     // 更新学分
-    await update_crtedit_his(userid, credit);
+    await update_crtedit_his(userid, credit, content);
     res.json({
       status: 200,
       msg: 'success'
