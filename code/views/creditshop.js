@@ -26,9 +26,9 @@ async function getcreditshop_service(req, res) {
 
 
 async function buycreditshop_service(req, res) {
-  const { userid, credit, creditshopid, content } = req.body
+  const { userid, credit, creditshopid, content, address } = req.body
   try {
-    const user = await buycreditshop(userid, credit, creditshopid, content);
+    const user = await buycreditshop(userid, credit, creditshopid, content, address);
     res.json({
       status: 200,
       msg: 'success'
