@@ -33,7 +33,7 @@ async function update(id, updatedData) {
 // 获取所有
 async function get_all(page = 1, pageSize = 10, filters = []) {
   const where = generate_filters(filters);
-
+  console.log("where", where)
   const skip = (page - 1) * pageSize;
   const take = pageSize;
 

@@ -293,3 +293,29 @@ model School {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
+
+// 积分商品
+model CreditShop {
+  id        Int       @id @default(autoincrement()) // 将 id 设为主键并自增
+  name      String?
+  image     String?
+  content   String?
+  isAvailable Boolean  @default(true)
+  delete    Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+// 积分商品历史
+model CreditShopHis {
+  id        Int       @id @default(autoincrement()) // 将 id 设为主键并自增
+  ceditShopID Int
+  name      String?
+  image     String?
+  content   String?
+  userId    Int
+  status    Int        @default(1)
+  delete    Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}

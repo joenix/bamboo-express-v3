@@ -14,6 +14,7 @@ const wechat = require('./wechat/index');
 const users = require('./views/user');
 const infomation = require('./views/infomation');
 const permission = require('./views/permission');
+const creditshop = require('./views/creditshop');
 const role = require('./views/role');
 const book = require('./views/book');
 const banner = require('./views/banner');
@@ -42,8 +43,11 @@ app.use('/users', users);
 app.use('/public', publics);
 app.use('/infomation', infomation);
 app.use('/permission', permission);
+app.use('/creditshop', creditshop);
 app.use('/role', role);
 app.use('/uploads', express.static(file_path));
+
+
 
 const PORT = process.env.PORT || 6033;
 app.listen(PORT, () => {
