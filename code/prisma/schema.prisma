@@ -300,6 +300,7 @@ model CreditShop {
   name      String?
   image     String?
   content   String?
+  credit    Int?
   isAvailable Boolean  @default(true)
   delete    Boolean    @default(false)
   createdAt DateTime   @default(now())

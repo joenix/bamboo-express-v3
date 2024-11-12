@@ -164,10 +164,14 @@ async function login(req, res) {
   }
 }
 async function wx_login(req, res) {
-  let { mobile, captcha, password } = req.body;
+  let { mobile, captcha, password, nickname } = req.body;
 
   if (!password) {
     password = captcha;
+  }
+  let nickname2 = nickname
+  if (!nickname) {
+    nickname2 = mobile
   }
 
   try {
@@ -178,7 +182,8 @@ async function wx_login(req, res) {
       await create({
         username: mobile,
         mobile: mobile,
-        password: password
+        password: password,
+        nickname: nickname2
       });
     }
 
