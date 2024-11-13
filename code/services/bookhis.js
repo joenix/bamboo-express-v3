@@ -13,7 +13,7 @@ async function create(body, credit) {
     // 更新阅读累计
     await createOrUpdateBookHisCount(body);
     // 更新学分
-    await update_crtedit_his(body['userId'], credit);
+    // await update_crtedit_his(body['userId'], credit);
   } catch (error) {
     console.log('error', error);
     throw error;
