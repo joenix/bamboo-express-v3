@@ -54,7 +54,7 @@ function generateRandomString(length) {
 
 async function update_handle(req, res) {
   try {
-    const { bookid, userid, code } = req.body;
+    const { bookId: bookid, userId: userid, code } = req.body;
     if (!bookid || !code) {
       new Error('no bookid or no user');
     }
