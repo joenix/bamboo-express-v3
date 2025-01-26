@@ -54,12 +54,12 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
 async function get_id(id) {
   const post = await prisma.User.findUnique({
     where: {
-      id: id, // 使用传入的 id 参数
+      id: id // 使用传入的 id 参数
     },
     include: {
       credits: true,
-      roles: true,
-    },
+      roles: true
+    }
   });
   if (post) {
     for (let i = 0; i < post.length; i++) {

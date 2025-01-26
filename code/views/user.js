@@ -27,21 +27,20 @@ router.route('/get_credit_his').post(get_credit_his_service);
 // 获取积分
 async function get_credit_his_service(req, res) {
   try {
-    const { userid } = req.body
+    const { userid } = req.body;
     const result = await get_credit_his(userid);
     res.json({
       status: 200,
       msg: result
     });
   } catch (error) {
-    console.log("error", error)
+    console.log('error', error);
     res.json({
       status: 500,
       msg: '服务出现异常，请重试'
     });
   }
 }
-
 
 // 创建用户信息报告
 async function set_user_info(req, res) {
@@ -53,7 +52,7 @@ async function set_user_info(req, res) {
       msg: result
     });
   } catch (error) {
-    console.log("error", error)
+    console.log('error', error);
     res.json({
       status: 500,
       msg: '服务出现异常，请重试'
@@ -63,7 +62,7 @@ async function set_user_info(req, res) {
 
 async function get_user_info_item(req, res) {
   try {
-    const { id } = req.body
+    const { id } = req.body;
     // 创建记录
     const result = await get_item(id);
     res.json({
@@ -71,7 +70,7 @@ async function get_user_info_item(req, res) {
       msg: result
     });
   } catch (error) {
-    console.log("error", error)
+    console.log('error', error);
     res.json({
       status: 500,
       msg: '服务出现异常，请重试'
@@ -79,7 +78,7 @@ async function get_user_info_item(req, res) {
   }
 }
 
-// 获取用户信息报告 
+// 获取用户信息报告
 async function get_user_report(req, res) {
   try {
     const { id, day } = req.body;
@@ -90,7 +89,7 @@ async function get_user_report(req, res) {
       msg: result
     });
   } catch (error) {
-    console.log("error", error)
+    console.log('error', error);
     res.json({
       status: 500,
       msg: '服务出现异常，请重试'
@@ -121,7 +120,7 @@ async function update_crtedit(req, res) {
   try {
     const userid = parseInt(req.body.userid) || 0;
     const credit = parseInt(req.body.credit) || 1;
-    const content = req.body.content || "";
+    const content = req.body.content || '';
 
     // 更新学分
     await update_crtedit_his(userid, credit, content);
@@ -169,9 +168,9 @@ async function wx_login(req, res) {
   if (!password) {
     password = captcha;
   }
-  let nickname2 = nickname
+  let nickname2 = nickname;
   if (!nickname) {
-    nickname2 = mobile
+    nickname2 = mobile;
   }
 
   try {

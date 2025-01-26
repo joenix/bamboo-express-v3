@@ -68,6 +68,11 @@ model User_Info {
   rightEyes String
   height    String
   weight    String
+  name      String
+  gender    Int
+  birth     DateTime
+  age       Int
+  career    String
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
   delete    Boolean  @default(false)

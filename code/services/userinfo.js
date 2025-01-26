@@ -80,12 +80,12 @@ async function get_userinfo_report(id, limt = 7) {
       userId: userId,
       delete: false,
       createdAt: {
-        gte: startDate,
-      },
+        gte: startDate
+      }
     },
     orderBy: {
-      createdAt: 'desc',
-    },
+      createdAt: 'desc'
+    }
   });
 
   // 按天分组并获取每日最晚的记录
@@ -100,7 +100,6 @@ async function get_userinfo_report(id, limt = 7) {
     }
   }
 
-
   if (dailyLatestRecords) {
     return dailyLatestRecords;
   } else {
@@ -112,18 +111,17 @@ async function get_item(userId) {
   const latestUserInfo = await prisma.user_Info.findFirst({
     where: {
       userId: userId, // 当前用户的ID
-      delete: false,   // 确保数据没有被标记为删除
+      delete: false // 确保数据没有被标记为删除
     },
     orderBy: {
-      createdAt: 'desc', // 按 createdAt 字段降序排列，最新的记录在前
-    },
+      createdAt: 'desc' // 按 createdAt 字段降序排列，最新的记录在前
+    }
   });
   if (latestUserInfo) {
     return latestUserInfo;
   } else {
     return null;
   }
-
 }
 
 module.exports = {
