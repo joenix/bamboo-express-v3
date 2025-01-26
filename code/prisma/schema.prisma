@@ -73,6 +73,7 @@ model User_Info {
   birth     DateTime
   age       Int
   career    String
+  photo     String
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
   delete    Boolean  @default(false)
