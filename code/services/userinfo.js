@@ -110,7 +110,7 @@ async function get_userinfo_report(id, limt = 7) {
 async function get_item(userId) {
   const latestUserInfo = await prisma.user_Info.findFirst({
     where: {
-      userId: userId, // 当前用户的ID
+      id: userId, // 当前用户的ID
       delete: false // 确保数据没有被标记为删除
     },
     orderBy: {
