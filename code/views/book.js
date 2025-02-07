@@ -4,10 +4,13 @@ const { create, update, get_all, get_id, get_books_code_user, getDaysWithRecords
 
 const { create: create_his, get_select_all } = require('../services/bookhis');
 
+const { get_id: get_book_info_by_id, update: update_book_by_id } = require('../services/bookhiscount');
+
 router.route('/create').post(create_handle);
 router.route('/update').post(update_handle);
 router.route('/get_all').post(get_all_handle);
 router.route('/book_his').post(book_his_handle);
+router.route('/get_book_info').post(get_book_info);
 router.route('/wx_get_books').post(wx_get_books);
 router.route('/wx_ranks_today').post(ranks_today);
 router.route('/wx_ranks').post(ranks);
@@ -61,14 +64,61 @@ async function wx_get_books(req, res) {
   }
 }
 
+// 点读提交
 async function book_his_handle(req, res) {
   try {
     const credit = req.query['credit'] || 5;
     // 添加用户点读记录 和 更新用户学分
     await create_his(req.body, credit);
+
+    /**
+     * @author joenix
+     * @description 累加总表时长
+     * ======== ======== ========
+     * @todo 1: 获取参数 bookId, count, time
+     * @todo 2: 读取总表 BookHisCount
+     * @todo 3: 时间累加、次数累加
+     * @todo 4: 更新总表数据
+     * ======== ======== ========
+     */
+
+    // 1.
+    const { bookId, count, time } = req.query;
+
+    // 2.
+    const data = await get_book_info_by_id(bookId);
+
+    // 3.
+    data.time += time;
+    data.count += count;
+
+    // 4.
+    await update_book_by_id(bookId, data);
+
     res.json({
       status: 200,
       msg: 'success'
+    });
+  } catch (error) {
+    console.log('error', error);
+    res.json({
+      status: 500,
+      msg: '服务出现异常，请重试'
+    });
+  }
+}
+
+// 获取单本书的数据
+async function get_book_info(req, res) {
+  try {
+    // Book ID
+    const id = req.query['id'];
+    let data = await get_book_info_by_id(id);
+    res.json({
+      status: 200,
+      msg: {
+        data
+      }
     });
   } catch (error) {
     console.log('error', error);
