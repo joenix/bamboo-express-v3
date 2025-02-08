@@ -67,7 +67,7 @@ async function wx_get_books(req, res) {
 // 点读提交
 async function book_his_handle(req, res) {
   try {
-    const credit = req.query['credit'] || 5;
+    const credit = req.body['credit'] || req.query['credit'] || 5;
     // 添加用户点读记录 和 更新用户学分
     await create_his(req.body, credit);
 
