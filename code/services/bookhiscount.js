@@ -66,7 +66,6 @@ async function createOrUpdateBookHisCount(body) {
 async function update(id, updatedData) {
   let updatedPermission;
   try {
-    console.log('更新数据', updatedData);
     updatedPermission = await prisma.BookHisCount.update({
       where: { id: id - 0 },
       data: updatedData

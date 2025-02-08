@@ -15,6 +15,7 @@ router.route('/wx_get_books').post(wx_get_books);
 router.route('/wx_ranks_today').post(ranks_today);
 router.route('/wx_ranks').post(ranks);
 router.route('/get_all_records').post(get_all_records);
+router.route('/get_all_exp').post(get_all_exp_by_user);
 
 async function ranks_today(req, res) {
   try {
@@ -189,6 +190,48 @@ async function get_all_records(req, res) {
       status: 200,
       msg: {
         data: ress
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      status: 500,
+      msg: '服务出现异常，请重试'
+    });
+  }
+}
+
+// 复合接口：根据用户 ID 获取 竹简 心得
+async function get_all_exp_by_user(req, res) {
+  try {
+    /**
+     * @author joenix
+     * @todo 1. 获取参数 UserId
+     * @todo 2. 获取竹简清单
+     * @todo 3. 获取竹简信息，附带心得
+     * ======== ======== ========
+     */
+
+    // 1.
+    const { userid } = req.body;
+
+    // 2.
+    const { data: books } = await get_books_code_user(userid);
+
+    // 3.
+    let exps = [];
+    for (const book of books) {
+      const exp = (await queryAnotherTableById(book.id)) || {};
+      exp.book = book;
+
+      exps.push(exp);
+    }
+
+    // res.
+    res.json({
+      status: 200,
+      msg: {
+        data: exps
       }
     });
   } catch (error) {
