@@ -83,7 +83,7 @@ async function book_his_handle(req, res) {
      */
 
     // 1.
-    const { bookId, count, time } = req.query;
+    const { bookId, count, time } = req.body;
 
     console.log(1, bookId, count, time);
 
