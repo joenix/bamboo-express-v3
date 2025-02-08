@@ -85,12 +85,8 @@ async function book_his_handle(req, res) {
     // 1.
     const { bookId, count, time } = req.body;
 
-    console.log(1, bookId, count, time);
-
     // 2.
     const data = await get_book_info_by_id(bookId);
-
-    console.log(2, data);
 
     // 3.
     data.time += time;
