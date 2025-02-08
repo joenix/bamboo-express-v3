@@ -112,7 +112,7 @@ async function book_his_handle(req, res) {
 async function get_book_info(req, res) {
   try {
     // Book ID
-    const id = req.query['id'];
+    const id = req.body['id'] || req.query['id'];
     let data = await get_book_info_by_id(id);
     res.json({
       status: 200,
