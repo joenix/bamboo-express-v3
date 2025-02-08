@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const { create, update, get_all, get_id, get_books_code_user, getDaysWithRecordsForMonth } = require('../services/book');
 
-const { create: create_his, get_select_all } = require('../services/bookhis');
+const { create: create_his, get_select_all, get_all: get_all_bookhis } = require('../services/bookhis');
 
 const { get_id: get_book_info_by_id, update: update_book_by_id } = require('../services/bookhiscount');
 
@@ -221,7 +221,7 @@ async function get_all_exp_by_user(req, res) {
     // 3.
     let exps = [];
     for (const book of books) {
-      const exp = (await queryAnotherTableById(book.id)) || {};
+      const exp = (await get_all_bookhis(1, 10, [{ key: 'book', value: book.id }])) || {};
       exp.book = book;
 
       exps.push(exp);
