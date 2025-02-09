@@ -110,6 +110,9 @@ async function get_books_code_user(user_id) {
   const books = await prisma.Book.findMany({
     where: {
       delete: false
+    },
+    include: {
+      bookHis: true
     }
   });
   // 根据用户获取code
@@ -174,7 +177,6 @@ async function get_books_code_user(user_id) {
     }
     all_book.push(book);
   }
-  console.log(178, all_book);
   return all_book;
 }
 
