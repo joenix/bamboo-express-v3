@@ -39,18 +39,18 @@ async function getDaysWithRecordsForMonth(userId, year, month) {
       delete: false,
       createdAt: {
         gte: new Date(Date.UTC(year, month - 1, 1)), // 月份从0开始
-        lt: new Date(Date.UTC(year, month, 1)),      // 下个月的第一天
-      },
+        lt: new Date(Date.UTC(year, month, 1)) // 下个月的第一天
+      }
     },
     select: {
-      createdAt: true,
-    },
+      createdAt: true
+    }
   });
 
   // 提取唯一的日期（去重）并返回 UTC 零点的时间戳
   const uniqueDays = Array.from(
     new Set(
-      result.map(record => {
+      result.map((record) => {
         const date = new Date(record.createdAt);
         date.setUTCHours(0, 0, 0, 0); // 设置为当天 UTC 零点
         return date.getTime();
@@ -124,57 +124,57 @@ async function get_books_code_user(user_id) {
   startOfDay.setHours(0, 0, 0, 0);
   const endOfDay = new Date();
   endOfDay.setHours(23, 59, 59, 999);
-  console.log("codes", codes)
+  console.log('codes', codes);
   if (!books || !codes) {
     return [];
   }
-  let all_book = []
+  let all_book = [];
   // 设置是否激活状态
   for (let index = 0; index < books.length; index++) {
     const book = books[index];
-    book["read_count"] = 0
+    book['read_count'] = 0;
     const distinctUserCount = await prisma.bookHis.groupBy({
       by: ['userId'],
       where: {
         bookId: book?.id,
-        delete: false,
+        delete: false
       },
       _count: {
-        _all: true,
-      },
+        _all: true
+      }
     });
-    book["read_count"] = distinctUserCount?.length || 0
+    book['read_count'] = distinctUserCount?.length || 0;
     for (let J = 0; J < codes.length; J++) {
       const code = codes[J];
       book['active'] = false;
 
-      book["today_count"] = 0
-      book["today_time"] = 0
+      book['today_count'] = 0;
+      book['today_time'] = 0;
 
       if (code?.bookId == book?.id && code?.active) {
         book['active'] = true;
         const result = await prisma.bookHis.aggregate({
           _sum: {
             count: true,
-            time: true,
+            time: true
           },
           where: {
             userId: user_id,
             bookId: book?.id,
             createdAt: {
               gte: startOfDay,
-              lte: endOfDay,
+              lte: endOfDay
             },
-            delete: false, // 排除已标记为删除的记录
-          },
+            delete: false // 排除已标记为删除的记录
+          }
         });
-        book["today_count"] = result._sum.count || 0
-        book["today_time"] = result._sum.time || 0
+        book['today_count'] = result._sum.count || 0;
+        book['today_time'] = result._sum.time || 0;
       }
-
     }
-    all_book.push(book)
+    all_book.push(book);
   }
+  console.log(178, all_book);
   return all_book;
 }
 
