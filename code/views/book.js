@@ -49,6 +49,7 @@ async function ranks(req, res) {
 
 async function wx_get_books(req, res) {
   try {
+    console.log(52, req.user.id);
     let data = await get_books_code_user(req.user.id);
     res.json({
       status: 200,
