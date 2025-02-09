@@ -206,30 +206,17 @@ async function get_all_exp_by_user(req, res) {
   try {
     /**
      * @author joenix
-     * @todo 1. 获取参数 UserId
+     * @todo 1. 获取参数 UserId (from Token)
      * @todo 2. 获取竹简清单
      * @todo 3. 获取竹简信息，附带心得
      * ======== ======== ========
      */
 
-    // 1.
-    // const { userid } = req.body;
-
     // 2.
     const books = (await get_books_code_user(req.user.id)) || [];
-    console.log(222, books);
 
     // 3.
-    let exps = [];
-    for (const book of books) {
-      console.log(211, book);
-      const exp = await get_all_bookhis(1, 10, [{ key: 'book', value: book.id }]);
-      console.log(225, exp);
-      exp.book = book;
-
-      exps.push(exp);
-    }
-    console.log(333, exps);
+    const exps = books.map((book) => book.bookHis);
 
     // res.
     res.json({
