@@ -49,7 +49,6 @@ async function ranks(req, res) {
 
 async function wx_get_books(req, res) {
   try {
-    console.log(52, req.user.id);
     let data = await get_books_code_user(req.user.id);
     res.json({
       status: 200,
@@ -214,11 +213,10 @@ async function get_all_exp_by_user(req, res) {
      */
 
     // 1.
-    const { userid } = req.body;
-    console.log(111, userid);
+    // const { userid } = req.body;
 
     // 2.
-    const { data: books = [] } = await get_books_code_user(userid);
+    const { data: books = [] } = await get_books_code_user(req.user.id);
     console.log(222, books);
     // 3.
     let exps = [];
