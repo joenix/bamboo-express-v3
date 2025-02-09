@@ -222,6 +222,7 @@ async function get_all_exp_by_user(req, res) {
     // 3.
     let exps = [];
     for (const book of books) {
+      console.log(211, book);
       const exp = await get_all_bookhis(1, 10, [{ key: 'book', value: book.id }]);
       console.log(225, exp);
       exp.book = book;
