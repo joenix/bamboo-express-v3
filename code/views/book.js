@@ -216,7 +216,8 @@ async function get_all_exp_by_user(req, res) {
     // const { userid } = req.body;
 
     // 2.
-    const books = await get_books_code_user(req.user.id);
+    const books = (await get_books_code_user(req.user.id)) || [];
+    console.log(222, books);
 
     // 3.
     let exps = [];
