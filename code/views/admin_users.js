@@ -29,11 +29,11 @@ async function create_handle(req, res) {
 
 async function update_handle(req, res) {
   try {
-    const response = await update(req.body.id, req.body);
+    const data = await update(req.body.id, req.body);
 
     res.json({
       status: 200,
-      msg: `success`
+      msg: data
     });
   } catch (error) {
     res.json({
@@ -45,11 +45,11 @@ async function update_handle(req, res) {
 
 async function remove_handle(req, res) {
   try {
-    const response = await remove(req.body.id);
+    const data = await remove(req.body.id);
 
     res.json({
       status: 200,
-      msg: `success`
+      msg: data
     });
   } catch (error) {
     res.json({
@@ -85,8 +85,7 @@ async function get_one_handle(req, res) {
 
     res.json({
       status: 200,
-      data,
-      msg: `success`
+      msg: data
     });
   } catch (error) {
     res.json({
