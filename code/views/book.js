@@ -216,7 +216,9 @@ async function get_all_exp_by_user(req, res) {
     const books = (await get_books_code_user(req.user.id)) || [];
 
     // 3.
-    const exps = books.map((book) => book.bookHis);
+    const exps = books.map((book) => {
+      return book.bookHis;
+    });
 
     // res.
     res.json({
