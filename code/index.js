@@ -27,14 +27,14 @@ const material = require('./views/material');
 
 // For Admin
 const admin_users = require('./views/admin_users');
-const admin_information = require('./views/admin_information');
-const admin_teach = require('./views/admin_teach');
-const admin_school = require('./views/admin_school');
-const admin_gift = require('./views/admin_gift');
-const admin_gift_exchange = require('./views/admin_gift_exchange');
-const admin_code = require('./views/admin_code');
-const admin_book = require('./views/admin_book');
-const admin_material = require('./views/admin_material');
+// const admin_information = require('./views/admin_information');
+// const admin_teach = require('./views/admin_teach');
+// const admin_school = require('./views/admin_school');
+// const admin_gift = require('./views/admin_gift');
+// const admin_gift_exchange = require('./views/admin_gift_exchange');
+// const admin_code = require('./views/admin_code');
+// const admin_book = require('./views/admin_book');
+// const admin_material = require('./views/admin_material');
 
 app.use(cors());
 app.use(bodyParser.json());
