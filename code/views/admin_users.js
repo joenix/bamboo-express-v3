@@ -58,7 +58,7 @@ async function remove_handle(req, res) {
     });
   }
 }
-
+console.log(666);
 async function get_all_handle(req, res) {
   console.log(789);
   try {
