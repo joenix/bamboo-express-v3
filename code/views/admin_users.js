@@ -61,9 +61,13 @@ async function remove_handle(req, res) {
 
 async function get_all_handle(req, res) {
   try {
+    console.log(100);
     const page = parseInt(req.query.page) || 1;
+    console.log(11, page);
     const pageSize = parseInt(req.query.pageSize) || 10;
+    console.log(22, pageSize);
     const filters = req.body.filters || [];
+    console.log(33, filters);
 
     console.log(68);
 
