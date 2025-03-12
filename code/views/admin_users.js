@@ -2,11 +2,17 @@ const router = require('express').Router();
 
 const { create, update, remove, get_all, get_one } = require('../services/admin_users');
 
+console.log(6001);
 router.route('/create').post(create_handle);
+console.log(6002);
 router.route('/update').post(update_handle);
+console.log(6003);
 router.route('/remove').post(remove_handle);
+console.log(6004);
 router.route('/get_all').post(get_all_handle);
+console.log(6005);
 router.route('/get_one').post(get_one_handle);
+console.log(6006);
 
 async function create_handle(req, res) {
   try {
