@@ -27,7 +27,7 @@ const material = require('./views/material');
 
 // For Admin
 const admin_users = require('./views/admin_users');
-// const admin_information = require('./views/admin_information');
+const admin_information = require('./views/admin_information');
 // const admin_teach = require('./views/admin_teach');
 // const admin_school = require('./views/admin_school');
 // const admin_gift = require('./views/admin_gift');
@@ -61,7 +61,7 @@ app.use('/uploads', express.static(file_path));
 
 // For Admin
 app.use('/admin/users', admin_users); // 用户管理
-// app.use('/admin/information', admin_information); // 资讯管理
+app.use('/admin/information', admin_information); // 资讯管理
 // app.use('/admin/teach', admin_teach); // 师资管理
 // app.use('/admin/school', admin_school); // 机构管理
 // app.use('/admin/gift', admin_gift); // 礼品管理

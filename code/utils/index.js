@@ -19,7 +19,7 @@ async function catcher(resolve, reject) {
 }
 
 // 构建过滤条件
-function generate_filters(filters = []) {
+function generate_filters(filters = [], exps = {}) {
   let filter_obj = {};
   if (Array.isArray(filters)) {
     filters.forEach((el) => {
@@ -30,7 +30,8 @@ function generate_filters(filters = []) {
   }
   const where = {
     delete: false, // 假设 delete 是一个布尔类型的字段
-    ...filter_obj
+    ...filter_obj,
+    ...exps
   };
   return where;
 }
