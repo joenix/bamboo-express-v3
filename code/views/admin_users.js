@@ -10,12 +10,12 @@ router.route('/get_one').post(get_one_handle);
 
 async function create_handle(req, res) {
   try {
-    const user = await create(req.body);
+    const data = await create(req.body);
 
     res.json({
       status: 200,
       data: {
-        id: user.id
+        id: data.id
       },
       msg: `success`
     });
@@ -58,23 +58,14 @@ async function remove_handle(req, res) {
     });
   }
 }
-console.log(666);
-async function get_all_handle(req, res) {
-  console.log(789);
-  try {
-    console.log(100);
-    const page = parseInt(req.query.page) || 1;
-    console.log(11, page);
-    const pageSize = parseInt(req.query.pageSize) || 10;
-    console.log(22, pageSize);
-    const filters = req.body.filters || [];
-    console.log(33, filters);
 
-    console.log(68);
+async function get_all_handle(req, res) {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10;
+    const filters = req.body.filters || [];
 
     let data = await get_all(page, pageSize, filters);
-
-    console.log(73);
 
     res.json({
       status: 200,

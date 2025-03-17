@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { create, update, remove, get_all, get_one } = require('../services/admin_school');
+const { create, update, remove, get_all, get_one } = require('../services/admin_tips');
 
 router.route('/create').post(create_handle);
 router.route('/update').post(update_handle);

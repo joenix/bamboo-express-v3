@@ -1,33 +1,13 @@
 const prisma = require('../utils/prisma');
 const { generate_filters } = require('../utils/index');
 
-const gte = 1;
-const lte = 9999;
-
 // 创建
 async function create(body) {
   let data;
-  let last;
 
   try {
-    // 获取最大值
-    last = await prisma.information.findFirst({
-      where: {
-        id: {
-          gte,
-          lte
-        }
-      },
-      orderBy: {
-        id: 'desc'
-      }
-    });
-
-    data = await prisma.information.create({
-      data: {
-        ...body,
-        id: last++
-      }
+    data = await prisma.tips.create({
+      data: body
     });
   } catch (error) {
     throw error;
@@ -40,7 +20,7 @@ async function create(body) {
 async function update(id, info) {
   let data;
   try {
-    data = await prisma.information.update({
+    data = await prisma.tips.update({
       where: { id: id - 0 },
       data: info
     });
@@ -55,7 +35,7 @@ async function remove(id) {
   let data;
 
   try {
-    data = await prisma.information.delete({
+    data = await prisma.tips.delete({
       where: { id: id - 0 }
     });
     return data;
@@ -66,24 +46,18 @@ async function remove(id) {
 
 // 查询列表
 async function get_all(page = 1, pageSize = 10, filters = []) {
-  const where = generate_filters(filters, {
-    // Information is from 1 to 9999
-    id: {
-      gte,
-      lte
-    }
-  });
+  const where = generate_filters(filters);
 
   const skip = (page - 1) * pageSize;
   const take = pageSize;
 
-  const data = await prisma.information.findMany({
+  const data = await prisma.tips.findMany({
     skip,
     take,
     where
   });
 
-  const counts = await prisma.information.count({
+  const counts = await prisma.tips.count({
     where: where
   });
 
@@ -99,7 +73,7 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
 
 // 查询单个
 async function get_one(id) {
-  const data = await prisma.information.findUnique({
+  const data = await prisma.tips.findUnique({
     where: { id: parseInt(id, 10) }
   });
 
