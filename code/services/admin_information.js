@@ -24,14 +24,10 @@ async function create(body) {
         }
       });
 
-      console.log(27, id);
-
       last = id + 1;
-
-      console.log(31, last);
     }
 
-    console.log(34, last);
+    console.log(30, last);
 
     data = await prisma.information.create({
       data: {
@@ -39,7 +35,10 @@ async function create(body) {
         id: last
       }
     });
+
+    console.log(39, data);
   } catch (error) {
+    console.log(41, error);
     throw error;
   }
 
