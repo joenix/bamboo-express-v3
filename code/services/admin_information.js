@@ -7,32 +7,32 @@ const lte = 9999;
 // 创建
 async function create(body) {
   let data;
-  let last;
-  console.log(11, body);
+  let last = body.id;
+
   try {
-    console.log(13);
-    // 获取最大值
-    last = await prisma.information.findFirst({
-      where: {
-        id: {
-          gte,
-          lte
+    if (!last) {
+      // 获取最大值
+      const { id } = await prisma.information.findFirst({
+        where: {
+          id: {
+            gte,
+            lte
+          }
+        },
+        orderBy: {
+          id: 'desc'
         }
-      },
-      orderBy: {
-        id: 'desc'
-      }
-    });
-    console.log(13, last);
+      });
+
+      last = id++;
+    }
 
     data = await prisma.information.create({
       data: {
         ...body,
-        id: last++
+        id: last
       }
     });
-
-    console.log(35, data);
   } catch (error) {
     throw error;
   }

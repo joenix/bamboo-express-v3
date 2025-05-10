@@ -11,7 +11,7 @@ router.route('/get_one').post(get_one_handle);
 async function create_handle(req, res) {
   try {
     const data = await create(req.body);
-    console.log(14, data);
+
     res.json({
       status: 200,
       data: {
