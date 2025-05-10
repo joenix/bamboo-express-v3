@@ -1,13 +1,18 @@
 const prisma = require('../utils/prisma');
 const { generate_filters } = require('../utils/index');
 
-const gte = 10000;
-const lte = 19999;
+// const gte = 10000;
+// const lte = 19999;
+const gte = 1;
+const lte = 99999;
+const type = 1;
 
 // 创建
 async function create(body) {
   let data;
   let last = body.id;
+
+  body.type = body.type || type;
 
   try {
     if (!last) {
