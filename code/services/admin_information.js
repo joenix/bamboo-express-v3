@@ -8,8 +8,9 @@ const lte = 9999;
 async function create(body) {
   let data;
   let last;
-
+  console.log(11, body);
   try {
+    console.log(13);
     // 获取最大值
     last = await prisma.information.findFirst({
       where: {
@@ -22,6 +23,7 @@ async function create(body) {
         id: 'desc'
       }
     });
+    console.log(13, last);
 
     data = await prisma.information.create({
       data: {
@@ -29,6 +31,8 @@ async function create(body) {
         id: last++
       }
     });
+
+    console.log(35, data);
   } catch (error) {
     throw error;
   }
