@@ -24,7 +24,7 @@ async function create(body) {
         }
       });
 
-      last = id++;
+      last = id + 1;
     }
 
     data = await prisma.information.create({

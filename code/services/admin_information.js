@@ -26,7 +26,7 @@ async function create(body) {
 
       console.log(27, id);
 
-      last = id++;
+      last = id + 1;
 
       console.log(31, last);
     }
