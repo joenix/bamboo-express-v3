@@ -22,7 +22,7 @@ async function create_handle(req, res) {
   } catch (error) {
     res.json({
       status: 500,
-      msg: `服务器异常`
+      msg: error
     });
   }
 }
@@ -38,7 +38,7 @@ async function update_handle(req, res) {
   } catch (error) {
     res.json({
       status: 500,
-      msg: `服务器异常`
+      msg: error
     });
   }
 }
@@ -54,7 +54,7 @@ async function remove_handle(req, res) {
   } catch (error) {
     res.json({
       status: 500,
-      msg: `服务器异常`
+      msg: error
     });
   }
 }
@@ -74,7 +74,7 @@ async function get_all_handle(req, res) {
   } catch (error) {
     res.json({
       status: 500,
-      msg: `服务器异常`
+      msg: error
     });
   }
 }
@@ -90,7 +90,7 @@ async function get_one_handle(req, res) {
   } catch (error) {
     res.json({
       status: 500,
-      msg: `服务器异常`
+      msg: error
     });
   }
 }
