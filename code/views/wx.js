@@ -23,10 +23,17 @@ async function phone_handle(req, res) {
     const encrypted = Buffer.from(encryptedData, 'base64');
     const ivBuffer = Buffer.from(iv, 'base64');
 
+    console.log(sessionKey, encrypted, ivBuffer);
+
     const decipher = crypto.createDecipheriv('aes-128-cbc', sessionKey, ivBuffer);
     decipher.setAutoPadding(true);
+
+    console.log(31, decipher);
+
     let decoded = decipher.update(encrypted, 'binary', 'utf8');
     decoded += decipher.final('utf8');
+
+    console.log(36, decoded);
 
     res.json(JSON.parse(decoded));
   } catch (err) {
