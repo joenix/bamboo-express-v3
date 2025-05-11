@@ -5,7 +5,7 @@ const { generate_filters } = require('../utils/index');
 // const lte = 19999;
 const gte = 1;
 const lte = 99999;
-const type = 1;
+const type = '1';
 
 // 创建
 async function create(body) {
