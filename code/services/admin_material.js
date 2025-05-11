@@ -48,8 +48,6 @@ async function remove(id) {
 async function get_all(page = 1, pageSize = 10, filters = []) {
   const where = generate_filters(filters);
 
-  console.log(36, where);
-
   const skip = (page - 1) * pageSize;
   const take = pageSize;
 
