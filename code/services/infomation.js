@@ -68,8 +68,8 @@ async function get_id(id) {
   });
 
   if (post) {
-    post['img'] = await get_ids(post.img || '');
-    post['video'] = await get_ids(post.video || '');
+    // post['img'] = await get_ids(post.img || '');
+    // post['video'] = await get_ids(post.video || '');
     return post;
   } else {
     return null;
