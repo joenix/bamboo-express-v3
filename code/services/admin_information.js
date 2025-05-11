@@ -83,8 +83,12 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
     }
   });
 
+  console.log(87, where);
+
   const skip = (page - 1) * pageSize;
   const take = pageSize;
+
+  console.log(92, { skip, take, where });
 
   const data = await prisma.information.findMany({
     skip,
@@ -92,9 +96,13 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
     where
   });
 
+  console.log(98, data);
+
   const counts = await prisma.information.count({
     where: where
   });
+
+  console.log(104, counts);
 
   const totalPages = Math.ceil(counts / pageSize);
 
