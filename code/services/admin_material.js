@@ -48,6 +48,8 @@ async function remove(id) {
 async function get_all(page = 1, pageSize = 10, filters = []) {
   const where = generate_filters(filters);
 
+  console.log(51, where);
+
   const skip = (page - 1) * pageSize;
   const take = pageSize;
 
@@ -56,6 +58,8 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
     take,
     where
   });
+
+  console.log(62, data);
 
   const counts = await prisma.material.count({
     where: where
