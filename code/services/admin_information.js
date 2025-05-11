@@ -95,9 +95,13 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
     where
   });
 
+  console.log(98, data);
+
   const counts = await prisma.information.count({
     where: where
   });
+
+  console.log(104, counts);
 
   const totalPages = Math.ceil(counts / pageSize);
 
