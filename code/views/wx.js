@@ -1,6 +1,7 @@
 const router = require('express').Router();
 
 router.route('/login').post(login_handle);
+router.route('/phone').post(phone_handle);
 
 async function login_handle(req, res) {
   const APPID = 'wx875ce0af9f17a215';
@@ -13,6 +14,24 @@ async function login_handle(req, res) {
   const result = await response.json();
 
   res.json(result);
+}
+
+async function phone_handle(req, res) {
+  const { encryptedData, iv, session_key } = req.body;
+  try {
+    const sessionKey = Buffer.from(session_key, 'base64');
+    const encrypted = Buffer.from(encryptedData, 'base64');
+    const ivBuffer = Buffer.from(iv, 'base64');
+
+    const decipher = crypto.createDecipheriv('aes-128-cbc', sessionKey, ivBuffer);
+    decipher.setAutoPadding(true);
+    let decoded = decipher.update(encrypted, 'binary', 'utf8');
+    decoded += decipher.final('utf8');
+
+    res.json(JSON.parse(decoded));
+  } catch (err) {
+    res.status(500).json({ error: '解密失败', message: err.message });
+  }
 }
 
 module.exports = router;
