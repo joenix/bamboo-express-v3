@@ -136,7 +136,7 @@ model Material {
   link        String?
   name        String
   content     String?
-  type        Int           @default(1)
+  mineType        Int           @default(1)
   delete      Boolean       @default(false)
   information Information[]
   banner      Banner[]
