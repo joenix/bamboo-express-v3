@@ -17,6 +17,7 @@ async function login_handle(req, res) {
 }
 
 async function phone_handle(req, res) {
+  console.log(10, req, res);
   const { encryptedData, iv, session_key } = req.body;
 
   console.log(19, encryptedData, iv, session_key);
