@@ -19,21 +19,38 @@ async function catcher(resolve, reject) {
 }
 
 // 构建过滤条件
+// function generate_filters(filters = [], exps = {}) {
+//   let filter_obj = {};
+//   if (Array.isArray(filters)) {
+//     filters.forEach((el) => {
+//       filter_obj[el['key']] = {
+//         contains: el['value'] || ''
+//       };
+//     });
+//   }
+//   const where = {
+//     delete: false, // 假设 delete 是一个布尔类型的字段
+//     ...filter_obj,
+//     ...exps
+//   };
+//   return where;
+// }
+
 function generate_filters(filters = [], exps = {}) {
-  let filter_obj = {};
+  const filter_obj = {};
   if (Array.isArray(filters)) {
     filters.forEach((el) => {
-      filter_obj[el['key']] = {
-        contains: el['value'] || ''
+      const { key, value, op = 'contains' } = el;
+      filter_obj[key] = {
+        [op]: value
       };
     });
   }
-  const where = {
-    delete: false, // 假设 delete 是一个布尔类型的字段
+  return {
+    delete: false,
     ...filter_obj,
     ...exps
   };
-  return where;
 }
 
 // 导出
