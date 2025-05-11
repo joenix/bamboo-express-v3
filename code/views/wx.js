@@ -18,6 +18,9 @@ async function login_handle(req, res) {
 
 async function phone_handle(req, res) {
   const { encryptedData, iv, session_key } = req.body;
+
+  console.log(19, encryptedData, iv, session_key);
+
   try {
     const sessionKey = Buffer.from(session_key, 'base64');
     const encrypted = Buffer.from(encryptedData, 'base64');
