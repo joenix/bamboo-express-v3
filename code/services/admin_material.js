@@ -67,7 +67,11 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
     where: where
   });
 
+  console.log(70, counts);
+
   const totalPages = Math.ceil(counts / pageSize);
+
+  console.log(74, totalPages);
 
   return {
     data,
