@@ -54,6 +54,7 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
     currentPage: page
   };
 }
+
 // 查询单个
 async function get_id(id) {
   const post = await prisma.Teach.findUnique({
