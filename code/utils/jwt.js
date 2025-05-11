@@ -5,6 +5,8 @@ const minimatch = require('minimatch').minimatch;
 
 // 白名单的URL
 const whitelist = [
+  '/wx/login',
+  '/wx/phone',
   '/users/login',
   '/users/wx_login', // 登录接口不需要验证JWT
   '/users/get_info',
