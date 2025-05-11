@@ -33,7 +33,7 @@ async function update(id, updatedData) {
 // 获取所有
 async function get_all(page = 1, pageSize = 10, filters = []) {
   const where = generate_filters(filters);
-  console.log("where", where)
+  console.log('where', where);
   const skip = (page - 1) * pageSize;
   const take = pageSize;
 
@@ -43,11 +43,11 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
     where: where
   });
 
-  for (let i = 0; i < infos.length; i++) {
-    const el = infos[i];
-    el['img'] = await get_ids(el.img || '');
-    el['video'] = await get_ids(el.video || '');
-  }
+  // for (let i = 0; i < infos.length; i++) {
+  //   const el = infos[i];
+  //   el['img'] = await get_ids(el.img || '');
+  //   el['video'] = await get_ids(el.video || '');
+  // }
 
   const counts = await prisma.Information.count({
     where: where
