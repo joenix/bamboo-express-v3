@@ -26,7 +26,7 @@ async function phone_handle(req, res) {
 
     console.log(data);
 
-    res.json(JSON.parse(data));
+    res.json(data);
   } catch (err) {
     res.status(500).json({ error: '解密失败', message: err.message });
   }
