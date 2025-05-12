@@ -14,7 +14,10 @@ async function login_handle(req, res) {
   console.log(12, code);
   const url = `https://api.weixin.qq.com/sns/jscode2session?appid=${APPID}&secret=${SECRET}&js_code=${code}&grant_type=authorization_code`;
 
+  console.log(17, url);
+
   const response = await fetch(url);
+  console.log(17.2, response);
   const result = await response.json();
 
   res.json(result);
