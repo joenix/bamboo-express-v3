@@ -14,7 +14,6 @@ router.route('/login').post(login);
 router.route('/regist').post(regist);
 router.route('/update').post(update_handle);
 // router.route('/wx_login').post(wx_login);
-router.route('/mnp_login').post(mnp_login);
 router.route('/get_all').post(get_all_users);
 router.route('/get_info').post(get_user_info);
 router.route('/get_data').post(get_user_data);
@@ -162,45 +161,6 @@ async function login(req, res) {
     console.error('登录错误：', error);
     res.status(200).json({ status: 500, error: '服务器错误' });
   }
-}
-
-async function mnp_login(req, res) {
-  let { mobile, openid } = req.body;
-
-  console.log(170, mobile, openid);
-
-  try {
-    let user = await find_username(mobile);
-
-    console.log(175, user);
-
-    if (!user) {
-      // 如果没有用户就创建一个
-      await create({
-        username: mobile,
-        mobile: mobile,
-        password: 'Aa123456',
-        nickname: mobile,
-        openId: openid
-      });
-    }
-
-    // 重新获取 user
-    user = await find_username(mobile);
-
-    console.log(191, user);
-
-    // 生成 JWT
-    const token = generateToken({ id: user.id });
-
-    console.log(196, token);
-
-    // 更新 token 字段
-    await update(user.id, { token });
-
-    // 返回
-    res.json({ status: 200, msg: token });
-  } catch (e) {}
 }
 
 // async function wx_login(req, res) {
