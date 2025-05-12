@@ -13,7 +13,8 @@ const { update_crtedit_his, get_credit_his } = require('../services/credit');
 router.route('/login').post(login);
 router.route('/regist').post(regist);
 router.route('/update').post(update_handle);
-router.route('/wx_login').post(wx_login);
+// router.route('/wx_login').post(wx_login);
+router.route('/mnp_login').post(mnp_login);
 router.route('/get_all').post(get_all_users);
 router.route('/get_info').post(get_user_info);
 router.route('/get_data').post(get_user_data);
@@ -162,16 +163,9 @@ async function login(req, res) {
     res.status(200).json({ status: 500, error: '服务器错误' });
   }
 }
-async function wx_login(req, res) {
-  let { mobile, captcha, password, nickname } = req.body;
 
-  if (!password) {
-    password = captcha;
-  }
-  let nickname2 = nickname;
-  if (!nickname) {
-    nickname2 = mobile;
-  }
+async function mnp_login(req, res) {
+  let { mobile, openid } = req.body;
 
   try {
     let user = await find_username(mobile);
@@ -181,18 +175,13 @@ async function wx_login(req, res) {
       await create({
         username: mobile,
         mobile: mobile,
-        password: password,
-        nickname: nickname2
+        password: 'Aa123456',
+        nickname: mobile
       });
     }
 
+    // 重新获取 user
     user = await find_username(mobile);
-
-    // 验证密码
-    const isPasswordValid = password == user.password;
-    if (!isPasswordValid) {
-      return res.status(200).json({ status: 500, error: '密码错误' });
-    }
 
     // 生成 JWT
     const token = generateToken({ id: user.id });
@@ -200,12 +189,55 @@ async function wx_login(req, res) {
     // 更新 token 字段
     await update(user.id, { token });
 
+    // 返回
     res.json({ status: 200, msg: token });
-  } catch (e) {
-    console.error('登录错误：', error);
-    res.status(200).json({ status: 500, error: '服务器错误' });
-  }
+  } catch (e) {}
 }
+
+// async function wx_login(req, res) {
+//   let { mobile, captcha, password, nickname } = req.body;
+
+//   if (!password) {
+//     password = captcha;
+//   }
+//   let nickname2 = nickname;
+//   if (!nickname) {
+//     nickname2 = mobile;
+//   }
+
+//   try {
+//     let user = await find_username(mobile);
+
+//     if (!user) {
+//       // 如果没有用户就创建一个
+//       await create({
+//         username: mobile,
+//         mobile: mobile,
+//         password: password,
+//         nickname: nickname2
+//       });
+//     }
+
+//     user = await find_username(mobile);
+
+//     // 验证密码
+//     const isPasswordValid = password == user.password;
+//     if (!isPasswordValid) {
+//       return res.status(200).json({ status: 500, error: '密码错误' });
+//     }
+
+//     // 生成 JWT
+//     const token = generateToken({ id: user.id });
+
+//     // 更新 token 字段
+//     await update(user.id, { token });
+
+//     res.json({ status: 200, msg: token });
+//   } catch (e) {
+//     console.error('登录错误：', error);
+//     res.status(200).json({ status: 500, error: '服务器错误' });
+//   }
+// }
 
 async function update_handle(req, res) {
   try {
