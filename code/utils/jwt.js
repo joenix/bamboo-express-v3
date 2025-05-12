@@ -7,6 +7,7 @@ const minimatch = require('minimatch').minimatch;
 const whitelist = [
   '/wx/login',
   '/wx/phone',
+  '/wx/mnp_login',
   '/users/login',
   '/users/wx_login', // 登录接口不需要验证JWT
   '/users/get_info',
