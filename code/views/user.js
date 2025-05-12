@@ -176,7 +176,8 @@ async function mnp_login(req, res) {
         username: mobile,
         mobile: mobile,
         password: 'Aa123456',
-        nickname: mobile
+        nickname: mobile,
+        openId: openid
       });
     }
 
