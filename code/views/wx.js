@@ -1,3 +1,4 @@
+const WXBizDataCrypt = require('wx-biz-data-crypt');
 const router = require('express').Router();
 
 router.route('/login').post(login_handle);
@@ -19,33 +20,11 @@ async function login_handle(req, res) {
 async function phone_handle(req, res) {
   const { encryptedData, iv, session_key } = req.body;
 
-  console.log('encryptedData:', encryptedData);
-  console.log('iv:', iv);
-  console.log('session_key:', session_key);
-
   try {
-    const sessionKey = Buffer.from(session_key, 'base64');
-    const encrypted = Buffer.from(encryptedData, 'base64');
-    const ivBuffer = Buffer.from(iv, 'base64');
+    const comp = new WXBizDataCrypt(APPID, session_key);
+    const data = comp.decryptData(encryptedData, iv);
 
-    console.log('sessionKey:', sessionKey);
-    console.log('encrypted:', encrypted);
-    console.log('ivBuffer:', ivBuffer);
-
-    const decipher = crypto.createDecipheriv('aes-128-cbc', sessionKey, ivBuffer);
-
-    console.log(30, decipher);
-
-    decipher.setAutoPadding(true);
-
-    console.log(31, decipher);
-
-    let decoded = decipher.update(encrypted, 'binary', 'utf8');
-    decoded += decipher.final('utf8');
-
-    console.log(36, decoded);
-
-    res.json(JSON.parse(decoded));
+    res.json(JSON.parse(data));
   } catch (err) {
     res.status(500).json({ error: '解密失败', message: err.message });
   }
