@@ -24,8 +24,6 @@ async function phone_handle(req, res) {
     const comp = new WXBizDataCrypt(APPID, session_key);
     const data = comp.decryptData(encryptedData, iv);
 
-    console.log(data);
-
     res.json(data);
   } catch (err) {
     res.status(500).json({ error: '解密失败', message: err.message });
