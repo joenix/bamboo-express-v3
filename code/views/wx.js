@@ -20,6 +20,8 @@ async function login_handle(req, res) {
   console.log(17.2, response);
   const result = await response.json();
 
+  console.log(17.3, result);
+
   res.json(result);
 }
 
