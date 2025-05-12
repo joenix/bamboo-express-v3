@@ -1,6 +1,7 @@
 const WXBizDataCrypt = require('wx-biz-data-crypt');
 const router = require('express').Router();
 
+const { generateToken } = require('../utils/jwt');
 const { create, update, find_username } = require('../services/user');
 
 router.route('/login').post(login_handle);
