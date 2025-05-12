@@ -54,12 +54,8 @@ async function mnp_login(req, res) {
     // 重新获取 user
     user = await find_username(mobile);
 
-    console.log(191, user.id);
-
     // 生成 JWT
     const token = generateToken({ id: user.id });
-
-    console.log(196, token);
 
     // 更新 token 字段
     await update(user.id, { token });
