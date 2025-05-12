@@ -167,8 +167,12 @@ async function login(req, res) {
 async function mnp_login(req, res) {
   let { mobile, openid } = req.body;
 
+  console.log(170, mobile, openid);
+
   try {
     let user = await find_username(mobile);
+
+    console.log(175, user);
 
     if (!user) {
       // 如果没有用户就创建一个
@@ -184,8 +188,12 @@ async function mnp_login(req, res) {
     // 重新获取 user
     user = await find_username(mobile);
 
+    console.log(191, user);
+
     // 生成 JWT
     const token = generateToken({ id: user.id });
+
+    console.log(196, token);
 
     // 更新 token 字段
     await update(user.id, { token });
