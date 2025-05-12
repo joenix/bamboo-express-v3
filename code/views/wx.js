@@ -37,12 +37,8 @@ async function phone_handle(req, res) {
 async function mnp_login(req, res) {
   let { mobile, openid } = req.body;
 
-  console.log(170, mobile, openid);
-
   try {
     let user = await find_username(mobile);
-
-    console.log(175, user);
 
     if (!user) {
       // 如果没有用户就创建一个
