@@ -41,7 +41,8 @@ const admin_material = require('./views/admin_material');
 const wx = require('./views/wx');
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '100mb' }));
+app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true })); // 解析URL编码请求体
 app.use(verifyToken);
 
