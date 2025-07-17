@@ -29,10 +29,10 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
-"@prisma/client@^5.18.0":
-  version "5.22.0"
-  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-5.22.0.tgz#da1ca9c133fbefe89e0da781c75e1c59da5f8802"
-  integrity sha512-M0SVXfyHnQREBKxCgyo7sffrKttwE6R8PMq330MIUF0pTwjUhLbW84pFDlf06B27XyCR++VtjugEnIHdr07SVA==
+"@prisma/client@^6.7.0":
+  version "6.12.0"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-6.12.0.tgz#e855c76fbad75b9b28ce7879be47bfeaba8ff588"
+  integrity sha512-wn98bJ3Cj6edlF4jjpgXwbnQIo/fQLqqQHPk2POrZPxTlhY3+n90SSIF3LMRVa8VzRFC/Gec3YKJRxRu+AIGVA==
 
 "@prisma/config@6.12.0":
   version "6.12.0"
@@ -1371,7 +1371,7 @@ signal-exit@^3.0.0:
 "six-backebd@file:.":
   version "1.0.0"
   dependencies:
-    "@prisma/client" "^5.18.0"
+    "@prisma/client" "^6.7.0"
     ali-oss "^6.21.0"
     axios "^1.7.2"
     bcrypt "^5.1.1"
@@ -1384,7 +1384,7 @@ signal-exit@^3.0.0:
     multer "^1.4.5-lts.1"
     mysql "^2.18.1"
     prisma "^6.7.0"
-    six-backebd "file:../../../../usr/local/share/.cache/yarn/v6/npm-six-backebd-1.0.0-ebc0cee1-7909-4ba7-8af7-a1123d12f71b-1752736717308/node_modules/six-backebd"
+    six-backebd "file:../../../../../Library/Caches/Yarn/v6/npm-six-backebd-1.0.0-33816320-72b4-4438-9d17-9adbd4e80e05-1752737166691/node_modules/six-backebd"
     wx-biz-data-crypt "^1.0.0"
 
 sqlstring@2.3.1:

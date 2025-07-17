@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/seassol/six-backebd#readme",
   "dependencies": {
-    "@prisma/client": "^5.18.0",
+    "@prisma/client": "^6.7.0",
     "ali-oss": "^6.21.0",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
