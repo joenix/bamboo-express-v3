@@ -89,7 +89,8 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
   const data = await prisma.information.findMany({
     skip,
     take,
-    where,
+    where
+    /*
     select: {
       id: true,
       // content: false,
@@ -102,6 +103,7 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
       type: true,
       remark: true
     }
+    */
   });
 
   const counts = await prisma.information.count({
