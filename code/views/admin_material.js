@@ -10,22 +10,13 @@ router.route('/get_one').post(get_one_handle);
 
 async function create_handle(req, res) {
   try {
-    console.log("body1", req.body);
-    req.body["mineType"] = req.body["type"];
-    delete req.body["type"];
-    if (
-      req.body["url"] &&
-      typeof req.body["url"] === "object" &&
-      Array.isArray(req.body["url"].fileList) &&
-      req.body["url"].fileList.length > 0 &&
-      req.body["url"].fileList[0].response &&
-      Array.isArray(req.body["url"].fileList[0].response.msg) &&
-      req.body["url"].fileList[0].response.msg.length > 0 &&
-      req.body["url"].fileList[0].response.msg[0].path
-    ) {
-      console.log("body2", req.body["url"]);
-      console.log("body3", req.body["url"]["fileList"][0]['response']['msg'][0]['path']);
-      req.body["url"] = req.body["url"]["fileList"][0]['response']['msg'][0]['path'];
+    console.log('body1', req.body);
+    req.body['mineType'] = req.body['type'];
+    delete req.body['type'];
+    if (req.body['url'] && typeof req.body['url'] === 'object' && Array.isArray(req.body['url'].fileList) && req.body['url'].fileList.length > 0 && req.body['url'].fileList[0].response && Array.isArray(req.body['url'].fileList[0].response.msg) && req.body['url'].fileList[0].response.msg.length > 0 && req.body['url'].fileList[0].response.msg[0].path) {
+      console.log('body2', req.body['url']);
+      console.log('body3', req.body['url']['fileList'][0]['response']['msg'][0]['path']);
+      req.body['url'] = req.body['url']['fileList'][0]['response']['msg'][0]['path'];
     }
     const data = await create(req.body);
 
@@ -37,7 +28,7 @@ async function create_handle(req, res) {
       msg: `success`
     });
   } catch (error) {
-    console.log("error", error)
+    console.log('error', error);
     res.json({
       status: 500,
       msg: error

@@ -89,7 +89,19 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
   const data = await prisma.information.findMany({
     skip,
     take,
-    where
+    where,
+    select: {
+      id: true,
+      // content: false,
+      name: true,
+      img: true,
+      video: true,
+      delete: true,
+      createdAt: true,
+      updatedAt: true,
+      type: true,
+      remark: true
+    }
   });
 
   const counts = await prisma.information.count({

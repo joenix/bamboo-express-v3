@@ -8,10 +8,8 @@ const client = new OSS({
   region: 'oss-cn-hangzhou', // 替换为你的区域
   accessKeyId: 'LTAI5tSaeKrMBGeQoSwobQAm',
   accessKeySecret: 'QATikRhjspb9f2oIRscypI333Lzgvm',
-  bucket: 'lhdd-club',
+  bucket: 'lhdd-club'
 });
-
-
 
 // 使用 memoryStorage 将文件保存在内存中
 const storage = multer.memoryStorage();
