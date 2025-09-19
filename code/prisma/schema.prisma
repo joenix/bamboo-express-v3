@@ -203,6 +203,7 @@ model Book {
   bookHisCount BookHisCount[]
   bookHis   BookHis[]
   delete    Boolean    @default(false)
+  userId    Int?       // 可选外键，关联到 User 模型
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
