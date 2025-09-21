@@ -77,7 +77,7 @@ async function remove(id) {
 async function get_all(page = 1, pageSize = 10, filters = []) {
   const where = generate_filters(filters, {
     // Information is from 1 to 9999
-    // type,
+    type,
     id: {
       gte,
       lte
