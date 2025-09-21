@@ -65,8 +65,6 @@ async function get_all_handle(req, res) {
     const pageSize = parseInt(req.query.pageSize) || 10;
     const filters = req.body.filters || [];
 
-    console.log(68, filters);
-
     let data = await get_all(page, pageSize, filters);
 
     res.json({
