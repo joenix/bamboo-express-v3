@@ -16,6 +16,8 @@ async function create(body) {
 
   try {
     if (!last) {
+      console.log(19, body);
+
       // 获取最大值
       const { id } = await prisma.information.findFirst({
         where: {
@@ -31,6 +33,8 @@ async function create(body) {
 
       last = id + 1;
     }
+
+    console.log(35, body);
 
     data = await prisma.information.create({
       data: {
