@@ -75,8 +75,6 @@ async function remove(id) {
 
 // 查询列表
 async function get_all(page = 1, pageSize = 10, filters = []) {
-  console.log(78, filters);
-
   const where = generate_filters(filters, {
     // Information is from 1 to 9999
     // type,
@@ -88,8 +86,6 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
 
   const skip = (page - 1) * pageSize;
   const take = pageSize;
-
-  console.log(90, skip, take, where);
 
   const data = await prisma.information.findMany({
     skip,
