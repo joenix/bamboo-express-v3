@@ -269,7 +269,7 @@ model Tips {
 model Teach {
   id        Int        @id @default(autoincrement())
   type      String 
-  mode      String 
+  mode      String?
   name      String
   avatar    String
   age       String
