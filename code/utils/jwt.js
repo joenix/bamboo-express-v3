@@ -27,7 +27,8 @@ const JWT_SECRET = 'sixsixsix';
 
 // 生成 JWT
 function generateToken(user) {
-  return jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '24h' });
+  // return jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '24h' });
+  return jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '10y' });
 }
 
 // 验证 JWT

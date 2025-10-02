@@ -54,7 +54,10 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
   const data = await prisma.user.findMany({
     skip,
     take,
-    where
+    where,
+    include: {
+      credits: true
+    }
   });
 
   const counts = await prisma.user.count({
