@@ -28,7 +28,7 @@ async function create(userid) {
 // 更新 学分记录表
 async function update_crtedit_his(userid, credit, content) {
   let updatedPermission;
-  console.log("content", content)
+  console.log('content', content);
   try {
     updatedPermission = await prisma.CreditHis.create({
       data: {
@@ -44,9 +44,7 @@ async function update_crtedit_his(userid, credit, content) {
   }
 }
 
-
 async function update(userid, credit) {
-  console.log('credit', credit);
   credit = credit - 0;
   const obj = { increment: credit };
 
@@ -75,7 +73,6 @@ async function update(userid, credit) {
     }
   }
 }
-
 
 // 获取所有
 async function get_all(page = 1, pageSize = 10) {
@@ -135,7 +132,6 @@ async function get_credit_his(id) {
     return null;
   }
 }
-
 
 module.exports = {
   create,

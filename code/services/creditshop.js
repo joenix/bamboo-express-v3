@@ -1,23 +1,22 @@
 const prisma = require('../utils/prisma');
 const { generate_filters } = require('../utils/index');
-const { update_crtedit_his } = require("./credit")
-
+const { update_crtedit_his } = require('./credit');
 
 async function getcreditshop(userId) {
   // Step 1: 查询 CreditShopHis 表，获取用户的积分商品历史
   const creditShopHistory = await prisma.creditShopHis.findMany({
-    where: { userId },
+    where: { userId }
   });
 
   // Step 2: 根据 ceditShopID 查询 CreditShop 信息并附加到历史记录中
   const historyWithShopInfo = await Promise.all(
     creditShopHistory.map(async (history) => {
       const shopInfo = await prisma.creditShop.findUnique({
-        where: { id: history.ceditShopID },
+        where: { id: history.ceditShopID }
       });
       return {
         ...history,
-        shopInfo,
+        shopInfo
       };
     })
   );
@@ -33,24 +32,23 @@ async function buycreditshop(userid, credit, creditshopid, content, address) {
     select: {
       credit: true // 仅选择 credit 字段
     }
-  })
+  });
   if (userCredit.credit < credit) {
-    throw "积分不足";
+    throw '积分不足';
   }
   // 更新用户积分
-  await update_crtedit_his(userid, -credit, content)
+  await update_crtedit_his(userid, -credit, content);
 
   // 添加购买历史
   user = await prisma.CreditShopHis.create({
     data: {
       ceditShopID: creditshopid,
       userId: userid,
-      content: address,
+      content: address
     }
   });
-  return true
+  return true;
 }
-
 
 // 创建
 async function create(body) {

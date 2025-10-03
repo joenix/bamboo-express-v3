@@ -9,7 +9,7 @@ router.route('/buycreditshop').post(buycreditshop_service);
 router.route('/getcreditshop').post(getcreditshop_service);
 
 async function getcreditshop_service(req, res) {
-  const { userid } = req.body
+  const { userid } = req.body;
   try {
     const user = await getcreditshop(userid);
     res.json({
@@ -24,9 +24,8 @@ async function getcreditshop_service(req, res) {
   }
 }
 
-
 async function buycreditshop_service(req, res) {
-  const { userid, credit, creditshopid, content, address } = req.body
+  const { userid, credit, creditshopid, content, address } = req.body;
   try {
     const user = await buycreditshop(userid, credit, creditshopid, content, address);
     res.json({
@@ -60,8 +59,12 @@ async function create_handle(req, res) {
 }
 
 async function update_handle(req, res) {
+  console.log(63, req, res);
   try {
-    const user = await update(req.query.id, req.body);
+    const user = await update(req.query.id || req.query.userId, req.body);
+
+    console.log(66, user);
+
     res.json({
       status: 200,
       msg: 'success'
