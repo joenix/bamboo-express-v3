@@ -59,9 +59,11 @@ async function create_handle(req, res) {
 }
 
 async function update_handle(req, res) {
-  console.log(63, req, res);
   try {
-    const user = await update(req.query.id || req.query.userId, req.body);
+    const userId = req.query.id || req.body.userId;
+    console.log(64, userId);
+    console.log(66, req.body);
+    const user = await update(userId, req.body);
 
     console.log(66, user);
 
