@@ -36,6 +36,7 @@ const admin_tips = require('./views/admin_tips');
 const admin_code = require('./views/admin_code');
 const admin_book = require('./views/admin_book');
 const admin_material = require('./views/admin_material');
+const admin_credit = require('./views/admin_credit');
 
 // For WX
 const wx = require('./views/wx');
@@ -75,6 +76,7 @@ app.use('/admin/tip', admin_tips); // 贴士管理
 app.use('/admin/code', admin_code); // 激活码
 app.use('/admin/book', admin_book); // 图书管理
 app.use('/admin/material', admin_material); // 物料管理
+app.use('/admin/credit', admin_credit); // 积分管理
 
 // For WX
 app.use('/wx', wx);

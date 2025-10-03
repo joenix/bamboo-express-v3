@@ -10,10 +10,7 @@
     "update": "npx prisma generate",
     "restart": "pm2 restart api"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/seassol/six-backebd.git"
-  },
+  "repository": "git+https://github.com/seassol/six-backebd.git",
   "author": "",
   "license": "ISC",
   "bugs": {
