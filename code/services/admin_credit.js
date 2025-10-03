@@ -58,10 +58,15 @@ async function get_user_credit(userId) {
 }
 
 // 修改用户积分
-async function update_user_credit(userId, creditAmount, content, operation = 'add') {
+async function update_user_credit(userId, creditAmount, content, operation = 'direct') {
   try {
     const userIdInt = parseInt(userId, 10);
     const creditInt = parseInt(creditAmount, 10);
+
+    // 验证积分不能为0
+    if (creditInt === 0) {
+      throw new Error('积分数量不能为0，请输入正数或负数');
+    }
 
     // 使用事务确保数据一致性
     const result = await prisma.$transaction(async (tx) => {
@@ -92,23 +97,25 @@ async function update_user_credit(userId, creditAmount, content, operation = 'ad
       let newCreditAmount;
       let operationContent;
 
-      // 根据操作类型计算新积分
-      if (operation === 'add') {
+      // 直接根据正负值修改积分
+      if (operation === 'direct') {
         newCreditAmount = currentCredit.credit + creditInt;
-        operationContent = `增加积分: +${creditInt}, 原因: ${content}`;
+        if (creditInt > 0) {
+          operationContent = `增加积分: +${creditInt}, 原因: ${content}`;
+        } else {
+          operationContent = `减少积分: ${creditInt}, 原因: ${content}`;
+        }
+      } else if (operation === 'add') {
+        newCreditAmount = currentCredit.credit + Math.abs(creditInt);
+        operationContent = `增加积分: +${Math.abs(creditInt)}, 原因: ${content}`;
       } else if (operation === 'subtract') {
-        newCreditAmount = currentCredit.credit - creditInt;
-        operationContent = `减少积分: -${creditInt}, 原因: ${content}`;
+        newCreditAmount = currentCredit.credit - Math.abs(creditInt);
+        operationContent = `减少积分: -${Math.abs(creditInt)}, 原因: ${content}`;
       } else if (operation === 'set') {
         newCreditAmount = creditInt;
         operationContent = `设置积分: ${creditInt}, 原因: ${content}`;
       } else {
-        throw new Error('无效的操作类型，支持的操作: add, subtract, set');
-      }
-
-      // 确保积分不为负数
-      if (newCreditAmount < 0) {
-        throw new Error('积分不能为负数');
+        throw new Error('无效的操作类型，支持的操作: direct, add, subtract, set');
       }
 
       // 更新积分
@@ -131,7 +138,8 @@ async function update_user_credit(userId, creditAmount, content, operation = 'ad
         creditHistory,
         operation: operationContent,
         previousCredit: currentCredit.credit,
-        newCredit: newCreditAmount
+        newCredit: newCreditAmount,
+        changeAmount: creditInt
       };
     });
 

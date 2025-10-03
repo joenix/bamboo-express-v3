@@ -64,10 +64,10 @@ async function update_user_credit_handle(req, res) {
       });
     }
 
-    if (isNaN(credit) || credit < 0) {
+    if (isNaN(credit) || credit === 0) {
       return res.json({
         status: 400,
-        msg: '积分数量必须是有效的非负数'
+        msg: '积分数量不能为0，请输入正数或负数'
       });
     }
 
@@ -78,7 +78,7 @@ async function update_user_credit_handle(req, res) {
       });
     }
 
-    const result = await update_user_credit(userId, credit, content, operation);
+    const result = await update_user_credit(userId, credit, content, operation || 'direct');
     
     res.json({
       status: 200,
