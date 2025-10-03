@@ -1,66 +1,61 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
-// 用户表
 model User {
-  id            Int         @id @default(autoincrement())
-  username      String      @unique
+  id            Int            @id @default(autoincrement())
+  username      String         @unique
   password      String
-  openId        String?     @unique
-  unionId       String?     @unique
+  openId        String?        @unique
+  unionId       String?        @unique
   nickname      String?
-  school        String?
-  grade         String?
-  sign_text     String?
-  age           String?
   avatarUrl     String?
   gender        Int?
   language      String?
   city          String?
   province      String?
   country       String?
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  creditId      Int?        @unique
-  credits       Credit?     @relation("UserCredit")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  creditId      Int?           @unique
   roleId        Int?
-  roles         Role?       @relation(fields: [roleId], references: [id])
-  creditHistory CreditHis[]
-  user_Info     User_Info[]
+  age           String?
+  grade         String?
+  school        String?
+  sign_text     String?
+  delete        Boolean        @default(false)
+  mobile        String?
+  token         String?        @unique
   bookHis       BookHis[]
   bookHisCount  BookHisCount[]
   code          Code[]
+  credits       Credit?        @relation("UserCredit")
+  creditHistory CreditHis[]
+  roles         Role?          @relation(fields: [roleId], references: [id])
   User_Code     User_Code[]
-  delete    Boolean  @default(false)
-  mobile        String?
-  token         String?     @unique
+  user_Info     User_Info[]
+
+  @@index([roleId], map: "User_roleId_fkey")
 }
 
-// 用户拥有那些code 
 model User_Code {
   id        Int      @id @default(autoincrement())
   code      String
   userId    Int
   used      Boolean  @default(false)
-  user      User     @relation(fields: [userId], references: [id])
   delete    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "User_Code_userId_fkey")
 }
 
-// 用户信息 一个用户对应多条信息
 model User_Info {
   id        Int      @id @default(autoincrement())
   avatar    String
@@ -68,264 +63,256 @@ model User_Info {
   rightEyes String
   height    String
   weight    String
+  userId    Int
+  delete    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   name      String
   gender    Int
   birth     String
   age       Int
   career    String
   photo     String
-  userId    Int
   user      User     @relation(fields: [userId], references: [id])
-  delete    Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  @@index([userId], map: "User_Info_userId_fkey")
 }
 
-// 角色表 管理员 老师 普通微信用户
 model Role {
-  id           Int        @id @default(autoincrement())
-  name         String     @default("")
+  id           Int          @id @default(autoincrement())
+  name         String       @default("")
   description  String?
-  user         User[]
   permissionId String?
-  delete       Boolean    @default(false)
-  permission   Permission[]
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  createdAt    DateTime     @default(now())
+  delete       Boolean      @default(false)
+  updatedAt    DateTime     @updatedAt
+  user         User[]
+  permission   Permission[] @relation("PermissionToRole")
 }
 
-// 权限表
 model Permission {
   id          Int      @id @default(autoincrement())
   name        String   @default("")
-  Role        Role[]
-  delete      Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
   description String?
+  createdAt   DateTime @default(now())
+  delete      Boolean  @default(false)
+  updatedAt   DateTime @updatedAt
+  Role        Role[]   @relation("PermissionToRole")
 }
 
-// 学分表
 model Credit {
   id        Int      @id @default(autoincrement())
   userId    Int      @unique
-  user      User     @relation("UserCredit", fields: [userId], references: [id])
   credit    Int      @default(0)
-  delete    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  delete    Boolean  @default(false)
+  user      User     @relation("UserCredit", fields: [userId], references: [id])
 }
 
-// 学分记录表
 model CreditHis {
   id        Int      @id @default(autoincrement())
   credit    Int      @default(0)
   content   String?
-  delete    Boolean  @default(false)
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  delete    Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "CreditHis_userId_fkey")
 }
 
-// 物料
-// type 1 图片 2 视频 3 书 4 音乐 5 附件
 model Material {
   id          Int           @id @default(autoincrement())
   url         String
   link        String?
   name        String
   content     String?
-  mineType        Int           @default(1)
+  mineType    Int           @default(1)
   delete      Boolean       @default(false)
-  information Information[]
-  banner      Banner[]
-  book        Book[]
-  tips        Tips[]
-  landing     Landing[]
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
+  banner      Banner[]      @relation("BannerToMaterial")
+  book        Book[]        @relation("BookToMaterial")
+  information Information[] @relation("InformationToMaterial")
+  landing     Landing[]     @relation("LandingToMaterial")
+  tips        Tips[]        @relation("MaterialToTips")
 }
 
-// 资讯
 model Information {
   id        Int        @id @default(autoincrement())
   content   String?    @db.LongText
   name      String
   img       String?
   video     String?
-  material  Material[]
+  delete    Boolean?   @default(false)
+  createdAt DateTime?  @default(now())
+  updatedAt DateTime?  @updatedAt
   type      String?    @default("1")
-  mode      String?
-  delete    Boolean?    @default(false)
-  createdAt DateTime?   @default(now())
-  updatedAt DateTime?   @updatedAt
+  mode      String?    @default("0") @db.VarChar(255)
   remark    String?
+  material  Material[] @relation("InformationToMaterial")
 }
 
-// Landing 活动页配置
 model Landing {
   id        Int        @id @default(autoincrement())
   content   Json
   name      String
-  type      Int     @default(1)
-  material  Material[]
+  type      Int        @default(1)
   delete    Boolean    @default(false)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  material  Material[] @relation("LandingToMaterial")
 }
 
-
-// 轮播
 model Banner {
   id        Int        @id @default(autoincrement())
   content   String
   name      String
   img       String
   video     String
-  material  Material[]
-  used      Boolean    @default(true)
+  delete    Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   index     Int        @default(1)
-  delete    Boolean    @default(false)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  used      Boolean    @default(true)
+  material  Material[] @relation("BannerToMaterial")
 }
 
-// 书
 model Book {
-  id        Int        @id @default(autoincrement())
-  name      String
-  url       String
-  img       String
-  content   String
-  material  Material[]
-  isdefault Boolean    @default(false) // 设置未激活的书
-  code      Code[]
+  id           Int            @id @default(autoincrement())
+  name         String
+  url          String
+  content      String
+  delete       Boolean        @default(false)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  img          String
+  isdefault    Boolean        @default(false)
+  bookHis      BookHis[]
   bookHisCount BookHisCount[]
-  bookHis   BookHis[]
-  delete    Boolean    @default(false)
-  userId    Int?       // 可选外键，关联到 User 模型
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  code         Code[]
+  material     Material[]     @relation("BookToMaterial")
 }
 
-// 用户点读记录 总记
 model BookHisCount {
   id        Int      @id @default(autoincrement())
   time      Int
   count     Int
   content   String
   bookId    Int
-  book      Book     @relation(fields: [bookId], references: [id])
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
   delete    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  book      Book     @relation(fields: [bookId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([bookId], map: "BookHisCount_bookId_fkey")
+  @@index([userId], map: "BookHisCount_userId_fkey")
 }
 
-// 用户点读记录历史
 model BookHis {
   id        Int      @id @default(autoincrement())
   time      Int
   count     Int
   content   String
   bookId    Int
-  book      Book     @relation(fields: [bookId], references: [id])
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
   delete    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  book      Book     @relation(fields: [bookId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([bookId], map: "BookHis_bookId_fkey")
+  @@index([userId], map: "BookHis_userId_fkey")
 }
 
-// 激活码
 model Code {
   id          Int       @id @default(autoincrement())
   bookId      Int
-  book        Book      @relation(fields: [bookId], references: [id])
   code        String    @unique
-  userId      Int? // 可选外键，关联到 User 模型
-  user        User?     @relation(fields: [userId], references: [id])
+  userId      Int?
   active      Boolean   @default(false)
-  activatedAt DateTime? // 记录激活时间
+  activatedAt DateTime?
   delete      Boolean   @default(false)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @default(now())
+  book        Book      @relation(fields: [bookId], references: [id])
+  user        User?     @relation(fields: [userId], references: [id])
+
+  @@index([bookId], map: "Code_bookId_fkey")
+  @@index([userId], map: "Code_userId_fkey")
 }
-// 贴士集
+
 model Tips {
   id        Int        @id @default(autoincrement())
   content   String
   name      String
   img       String
   video     String?
-  material  Material[]
   delete    Boolean    @default(false)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  material  Material[] @relation("MaterialToTips")
 }
 
-// 师资
 model Teach {
-  id        Int        @id @default(autoincrement())
-  type      String 
-  mode      String?
+  id        Int      @id @default(autoincrement())
+  type      String
   name      String
   avatar    String
   age       String
-  area          String
-  city          String?
-  province      String?
-  content   String?
+  city      String?
+  province  String?
   gender    String
   video     String?
-  delete    Boolean    @default(false)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  delete    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  area      String
+  content   String?
 }
 
-
-// 机构
 model School {
-  id        Int        @id @default(autoincrement())
-  type      String  // 培训机构 or 学校
-  name      String
-  img       String?
-  area          String
-  city          String?
-  province      String?
-  content   String?
-  nature    String
+  id          Int      @id @default(autoincrement())
+  type        String
+  name        String
+  city        String?
+  province    String?
+  nature      String
   school_type String
-  delete    Boolean    @default(false)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  delete      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  area        String
+  content     String?
+  img         String?
 }
 
-// 积分商品
 model CreditShop {
-  id        Int       @id @default(autoincrement()) // 将 id 设为主键并自增
-  name      String?
-  image     String?
-  content   String?
-  credit    Int?
+  id          Int      @id @default(autoincrement())
+  name        String?
+  image       String?
+  content     String?
   isAvailable Boolean  @default(true)
-  delete    Boolean    @default(false)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  delete      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  credit      Int?
 }
 
-// 积分商品历史
 model CreditShopHis {
-  id        Int       @id @default(autoincrement()) // 将 id 设为主键并自增
+  id          Int      @id @default(autoincrement())
   ceditShopID Int
-  name      String?
-  image     String?
-  content   String?
-  userId    Int
-  status    Int        @default(1)
-  delete    Boolean    @default(false)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  name        String?
+  image       String?
+  content     String?
+  userId      Int
+  status      Int      @default(1)
+  delete      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
