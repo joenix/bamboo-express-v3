@@ -22,10 +22,10 @@ async function get_user_credit_handle(req, res) {
   try {
     const { userId } = req.body;
     
-    if (!userId) {
+    if (!userId || isNaN(userId) || userId <= 0) {
       return res.json({
         status: 400,
-        msg: '用户ID不能为空'
+        msg: '用户ID必须是有效的正整数'
       });
     }
 
@@ -50,10 +50,10 @@ async function update_user_credit_handle(req, res) {
   try {
     const { userId, credit, content, operation } = req.body;
     
-    if (!userId) {
+    if (!userId || isNaN(userId) || userId <= 0) {
       return res.json({
         status: 400,
-        msg: '用户ID不能为空'
+        msg: '用户ID必须是有效的正整数'
       });
     }
 
@@ -99,10 +99,18 @@ async function get_credit_history_handle(req, res) {
   try {
     const { userId, page = 1, pageSize = 10 } = req.body;
     
-    if (!userId) {
+    if (!userId || isNaN(userId) || userId <= 0) {
       return res.json({
         status: 400,
-        msg: '用户ID不能为空'
+        msg: '用户ID必须是有效的正整数'
+      });
+    }
+
+    // 验证分页参数
+    if (page < 1 || pageSize < 1 || pageSize > 100) {
+      return res.json({
+        status: 400,
+        msg: '分页参数无效，页码必须大于0，每页数量必须在1-100之间'
       });
     }
 
@@ -128,6 +136,14 @@ async function get_all_users_credit_handle(req, res) {
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 10;
     const filters = req.body.filters || [];
+
+    // 验证分页参数
+    if (page < 1 || pageSize < 1 || pageSize > 100) {
+      return res.json({
+        status: 400,
+        msg: '分页参数无效，页码必须大于0，每页数量必须在1-100之间'
+      });
+    }
 
     const result = await get_all_users_credit(page, pageSize, filters);
     

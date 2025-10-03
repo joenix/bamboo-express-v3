@@ -8,9 +8,10 @@ async function get_user_credit(userId) {
       where: { id: parseInt(userId, 10) },
       select: {
         id: true,
-        name: true,
-        phone: true,
-        email: true
+        username: true,
+        nickname: true,
+        mobile: true,
+        openId: true
       }
     });
 
@@ -62,74 +63,79 @@ async function update_user_credit(userId, creditAmount, content, operation = 'ad
     const userIdInt = parseInt(userId, 10);
     const creditInt = parseInt(creditAmount, 10);
 
-    // 验证用户是否存在
-    const user = await prisma.user.findUnique({
-      where: { id: userIdInt }
-    });
+    // 使用事务确保数据一致性
+    const result = await prisma.$transaction(async (tx) => {
+      // 验证用户是否存在
+      const user = await tx.user.findUnique({
+        where: { id: userIdInt }
+      });
 
-    if (!user) {
-      throw new Error('用户不存在');
-    }
+      if (!user) {
+        throw new Error('用户不存在');
+      }
 
-    // 获取当前积分
-    let currentCredit = await prisma.Credit.findUnique({
-      where: { userId: userIdInt }
-    });
+      // 获取当前积分
+      let currentCredit = await tx.Credit.findUnique({
+        where: { userId: userIdInt }
+      });
 
-    // 如果用户没有积分记录，创建初始记录
-    if (!currentCredit) {
-      currentCredit = await prisma.Credit.create({
+      // 如果用户没有积分记录，创建初始记录
+      if (!currentCredit) {
+        currentCredit = await tx.Credit.create({
+          data: {
+            userId: userIdInt,
+            credit: 0
+          }
+        });
+      }
+
+      let newCreditAmount;
+      let operationContent;
+
+      // 根据操作类型计算新积分
+      if (operation === 'add') {
+        newCreditAmount = currentCredit.credit + creditInt;
+        operationContent = `增加积分: +${creditInt}, 原因: ${content}`;
+      } else if (operation === 'subtract') {
+        newCreditAmount = currentCredit.credit - creditInt;
+        operationContent = `减少积分: -${creditInt}, 原因: ${content}`;
+      } else if (operation === 'set') {
+        newCreditAmount = creditInt;
+        operationContent = `设置积分: ${creditInt}, 原因: ${content}`;
+      } else {
+        throw new Error('无效的操作类型，支持的操作: add, subtract, set');
+      }
+
+      // 确保积分不为负数
+      if (newCreditAmount < 0) {
+        throw new Error('积分不能为负数');
+      }
+
+      // 更新积分
+      const updatedCredit = await tx.Credit.update({
+        where: { userId: userIdInt },
+        data: { credit: newCreditAmount }
+      });
+
+      // 记录积分变更历史
+      const creditHistory = await tx.CreditHis.create({
         data: {
           userId: userIdInt,
-          credit: 0
+          credit: newCreditAmount, // 存储变更后的总积分
+          content: operationContent
         }
       });
-    }
 
-    let newCreditAmount;
-    let operationContent;
-
-    // 根据操作类型计算新积分
-    if (operation === 'add') {
-      newCreditAmount = currentCredit.credit + creditInt;
-      operationContent = `增加积分: +${creditInt}, 原因: ${content}`;
-    } else if (operation === 'subtract') {
-      newCreditAmount = currentCredit.credit - creditInt;
-      operationContent = `减少积分: -${creditInt}, 原因: ${content}`;
-    } else if (operation === 'set') {
-      newCreditAmount = creditInt;
-      operationContent = `设置积分: ${creditInt}, 原因: ${content}`;
-    } else {
-      throw new Error('无效的操作类型，支持的操作: add, subtract, set');
-    }
-
-    // 确保积分不为负数
-    if (newCreditAmount < 0) {
-      throw new Error('积分不能为负数');
-    }
-
-    // 更新积分
-    const updatedCredit = await prisma.Credit.update({
-      where: { userId: userIdInt },
-      data: { credit: newCreditAmount }
+      return {
+        updatedCredit,
+        creditHistory,
+        operation: operationContent,
+        previousCredit: currentCredit.credit,
+        newCredit: newCreditAmount
+      };
     });
 
-    // 记录积分变更历史
-    const creditHistory = await prisma.CreditHis.create({
-      data: {
-        userId: userIdInt,
-        credit: newCreditAmount, // 存储变更后的总积分
-        content: operationContent
-      }
-    });
-
-    return {
-      updatedCredit,
-      creditHistory,
-      operation: operationContent,
-      previousCredit: currentCredit.credit,
-      newCredit: newCreditAmount
-    };
+    return result;
   } catch (error) {
     throw error;
   }
@@ -147,8 +153,9 @@ async function get_credit_history(userId, page = 1, pageSize = 10) {
       where: { id: userIdInt },
       select: {
         id: true,
-        name: true,
-        phone: true
+        username: true,
+        nickname: true,
+        mobile: true
       }
     });
 
@@ -212,9 +219,10 @@ async function get_multiple_users_credit(userIds) {
       },
       select: {
         id: true,
-        name: true,
-        phone: true,
-        email: true
+        username: true,
+        nickname: true,
+        mobile: true,
+        openId: true
       }
     });
 
@@ -255,13 +263,18 @@ async function get_all_users_credit(page = 1, pageSize = 10, filters = []) {
     if (filters && filters.length > 0) {
       // 可以根据需要添加筛选逻辑
       filters.forEach(filter => {
-        if (filter.field === 'name' && filter.value) {
-          whereCondition.name = {
+        if (filter.field === 'username' && filter.value) {
+          whereCondition.username = {
             contains: filter.value
           };
         }
-        if (filter.field === 'phone' && filter.value) {
-          whereCondition.phone = {
+        if (filter.field === 'nickname' && filter.value) {
+          whereCondition.nickname = {
+            contains: filter.value
+          };
+        }
+        if (filter.field === 'mobile' && filter.value) {
+          whereCondition.mobile = {
             contains: filter.value
           };
         }
@@ -275,9 +288,10 @@ async function get_all_users_credit(page = 1, pageSize = 10, filters = []) {
       where: whereCondition,
       select: {
         id: true,
-        name: true,
-        phone: true,
-        email: true,
+        username: true,
+        nickname: true,
+        mobile: true,
+        openId: true,
         createdAt: true,
         updatedAt: true
       },
@@ -349,7 +363,7 @@ async function get_credit_statistics() {
     const avgCredits = usersWithCredit > 0 && totalCredits._sum.credit ? 
       totalCredits._sum.credit / usersWithCredit : 0;
 
-    // 积分分布统计
+    // 积分分布统计（限制返回结果数量，避免性能问题）
     const creditDistribution = await prisma.Credit.groupBy({
       by: ['credit'],
       _count: {
@@ -357,7 +371,8 @@ async function get_credit_statistics() {
       },
       orderBy: {
         credit: 'asc'
-      }
+      },
+      take: 50 // 限制返回最多50个不同的积分值
     });
 
     return {
