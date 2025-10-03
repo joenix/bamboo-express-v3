@@ -56,7 +56,17 @@ async function get_all(page = 1, pageSize = 10, filters = []) {
     take,
     where,
     include: {
-      credits: true
+      credits: {
+        select: {
+          id: true,
+          credit: true,
+          createdAt: true,
+          updatedAt: true
+        }
+      }
+    },
+    orderBy: {
+      createdAt: 'desc'
     }
   });
 
