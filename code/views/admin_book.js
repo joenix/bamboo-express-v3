@@ -197,7 +197,6 @@ async function get_all_handle(req, res) {
     res.json({
       status: 200,
       msg: data,
-      msg: '查询成功'
     });
   } catch (error) {
     console.error('查询图书列表失败:', error);
