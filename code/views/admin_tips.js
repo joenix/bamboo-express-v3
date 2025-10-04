@@ -10,14 +10,11 @@ router.route('/get_one').post(get_one_handle);
 
 async function create_handle(req, res) {
   try {
-    console.log(13, req.body);
-
+    // 容错
     req.body.name = '';
     req.body.img = '';
 
     const data = await create(req.body);
-
-    console.log(15, data);
 
     res.json({
       status: 200,
